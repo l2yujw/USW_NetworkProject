@@ -1,5 +1,3 @@
-package Test;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -7,7 +5,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-public class WebCrawlingTest {
+public class webCrawling {
     public static void main(String[] args) {
         String movie_title = "어벤져스";// 검색어
         String url_code = "https://movie.naver.com/movie/search/result.naver?section=movie&query="+movie_title;
@@ -58,10 +56,7 @@ public class WebCrawlingTest {
             String score_ntz = score_all.get(2).text(); // 네티즌
 
 //            Element score_ntz = score_main.select()
-            System.out.println("관람객 : "+ score_adc);
-            System.out.println("기자*평론가 : " +score_spec);
-            System.out.println("네티즌 : " + score_ntz);
-            System.out.println();
+            System.out.println("관람객:"+ score_adc + " 기자*평론가:" + score_spec + " 네티즌:" + score_ntz);
 
             String summary = "";
             if (doc.select(".con_tx").size() > 0) {
@@ -73,6 +68,23 @@ public class WebCrawlingTest {
             String poster = el.select(".poster img").attr("src"); // 영화 포스터 URL
             poster = poster.substring(0,poster.lastIndexOf("?"));
             System.out.println("포스터: " + poster);
+            System.out.println();
+
+
+            for (int i=0; i<5; i++) {
+                Element el3 = doc.select(".score_result > ul > li").get(i);// 리뷰 선택
+
+                Element star_score = el3.select(".star_score").get(0);
+                String review_score = star_score.text();// 리뷰 점수
+
+                Element score_reple = el3.select(".score_reple > p").get(0);
+                String review_reple = score_reple.text();// 리뷰
+
+                Element reple_date = el3.select(".score_reple > dl > dt > em").get(1);
+                String review_date = reple_date.text();// 리뷰 작성일
+
+                System.out.println(review_score + " : " + review_reple + " " + review_date);
+            }
 
 /*
             Elements info = el.select(".info_spec > dd").first().select("span"); // 영화 정보 - 장르, 제작국, 러닝타임, 개봉날짜
@@ -112,7 +124,6 @@ public class WebCrawlingTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
 
     }
 }
