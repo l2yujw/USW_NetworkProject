@@ -9,11 +9,34 @@ import java.io.IOException;
 
 public class WebCrawlingTest {
     public static void main(String[] args) {
-        //영화 코드 받아올 예정
-//        String movie_title = "어벤져스";
-//        String url_code = "https://movie.naver.com/movie/search/result.naver?query="+movie_title+"&section=all";
+        String movie_title = "어벤져스";// 검색어
+        String url_code = "https://movie.naver.com/movie/search/result.naver?section=movie&query="+movie_title;
 
-        String movie_code = "205027";
+        Document doc2 = null;
+        String movie_code;
+
+        try {
+            doc2 = Jsoup.connect(url_code).get();
+
+            Element el2 = doc2.select(".search_list_1").get(0);// 검색 결과들
+            String movie_code_sub = String.valueOf(el2.select(".result_thumb > a").get(4));// 검색 결과중 n번째 결과
+            int code_start = movie_code_sub.indexOf("code=");
+            int code_end = movie_code_sub.indexOf("\"><img");
+
+            movie_code = movie_code_sub.substring(code_start+5,code_end);// 선택한 영화 코드
+
+//            System.out.println(movie_code_sub);
+//            System.out.println();
+
+//            System.out.println(movie_code_sub);
+//            System.out.println(code_start);
+//            System.out.println(code_end);
+//            System.out.println(movie_code);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         String url = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+movie_code;
 
         Document doc = null;
@@ -26,7 +49,7 @@ public class WebCrawlingTest {
             String title = el.select(".h_movie > a").first().text(); // 타이틀
             System.out.println("타이틀: " + title);
 
-            Element score_main = el.select(".main_score").get(0 );
+            Element score_main = el.select(".main_score").get(0);
             Elements score_all = score_main.select(".star_score"); // 평점
 
             String score_adc_sub = score_all.get(0).text();
