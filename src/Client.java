@@ -1,24 +1,27 @@
 import javax.swing.*;
 
 public class Client {
-    public static String userName;
-    public static void checkID() {
-        // User 명단 만들기 + 중복되는 유저명 생기면 뒤에 숫자 붙이기! // User 명단 DB관리?
-
-        userName = JOptionPane.showInputDialog("사용할 id를 입력해주세요!");
-        while (userName.trim().equals("")) {
-            userName = JOptionPane.showInputDialog("아이디를 다시 입력해주세요!");
-        }
-        makeGUI();
-    }
-
-    public static void makeGUI() {
-        // 전체 화면 창 설정
-        new javaGui();
-
-    }
-
     public static void main(String[] args) {
-        checkID();
+        makeUserID();
     }
+
+    public static void makeUserID() {
+        String userID;
+        boolean overlap;
+
+        userID = JOptionPane.showInputDialog("사용할 아이디를 입력해주세요!");
+        overlap = Server.checkUser(userID);
+        while (userID.trim().equals("")) {
+            userID = JOptionPane.showInputDialog("아이디를 입력해주세요!");
+            overlap = Server.checkUser(userID);
+        }
+        while(overlap) {
+            userID = JOptionPane.showInputDialog("이미 사용중인 아아디입니다. 다른 아이디를 입력해주세요!");
+            overlap = Server.checkUser(userID);
+        }
+
+        new javaGui(userID);
+
+    }
+
 }

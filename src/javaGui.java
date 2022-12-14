@@ -1,4 +1,3 @@
-import javax.sound.sampled.Line;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -11,18 +10,18 @@ public class javaGui extends JFrame {
     JPanel panel3 = new JPanel();
 
 
-    public javaGui() {
+    public javaGui(String userName) {
         setSize(600, 700);
         setResizable(false);
         setLocationRelativeTo(null); // Frame 화면 가운데 위치
         setTitle("Network Project(Movie Review)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 메모리 제거
         setLayout(null);
-        firstView();
+        firstView(userName);
         setVisible(true);
     }
 
-    private void firstView() {
+    private void firstView(String userName) {
 
         // 검색창 Panel
         panel1.setBounds(0, 0, 600, 50);
@@ -37,7 +36,7 @@ public class javaGui extends JFrame {
         panel1.add(searchButton);
         panel1.add(chat);
 
-        // 1~6순위 포스터 Panel
+        // 1~6순위 포스터 Panel // Server로부터 웹 크롤링한 정보를 받아서 배치
         panel2.setBounds(0, 50, 600, 500);
         panel2.setBorder(new LineBorder(Color.black));
         panel2.setLayout(null);
@@ -88,9 +87,8 @@ public class javaGui extends JFrame {
         panel3.setBorder(new LineBorder(Color.black));
         panel3.setLayout(null);
         JLabel welcome = new JLabel();
-        welcome.setText(Client.userName + "님 방문을 환영합니다!");
+        welcome.setText(userName + "님 방문을 환영합니다!");
         welcome.setFont(new Font("", Font.BOLD, 25));
-        welcome.setBackground(Color.yellow);
         welcome.setBounds(100, 30, 500, 40);
         panel3.add(welcome);
 
@@ -101,8 +99,9 @@ public class javaGui extends JFrame {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 검색어가 null 또는 해당 검색어가 존재하지 않으면, window 창 소환!
-                // 검색어 null인 경우 / 검색한 영화명이 없는 경우 / 검색한 영화가 있는 경우
+                // 검색어가 null 또는 해당 검색어가 존재하지 않으면, 알림창 띄우기!
+                
+                // 검색한 영화가 있는 경우
                 if (searchField.getText().equals("")) {
                     System.out.println("검색어를 입력해주세요!");
                 }
@@ -111,8 +110,16 @@ public class javaGui extends JFrame {
                 }
             }
         });
+        chat.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openChat();
+            }
+        });
+    }
 
-
+    private void openChat() {
+        new Test.chatTestClient();
     }
 
     private void recycle(String searchText) {
@@ -209,7 +216,8 @@ public class javaGui extends JFrame {
         setVisible(true);
 
     }
-
+    
+    //1순위 ~ 6순위 영화 포스터 초기 화면에 배치하기
     private void putInPoster(JLabel jLabel) {
         String moviename = "기생충";
         String url = "recommendMovie/" + moviename + ".png"; // 1순위 ~ 6순위 영화 포스터 받아올 때 파일명 정해져야 함. 매개변수에 i값 추가해서 moviename 1~6 지정해서 출력하게끔 변경한다.
