@@ -1,6 +1,3 @@
-package Test;
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -94,7 +91,7 @@ public class chatTestServer {
                 userList.add(userID);
                 sendAll("[" + userID + "]님이 들어오셨습니다");
                 sendAll("사용자목록" + userList);
-                while (in != null) {
+                while (in != null) { // && userID != null
                     String inputMsg = in.readLine();
                     sendAll(userID + ">>" + inputMsg);
                 }
