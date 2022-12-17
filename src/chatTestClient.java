@@ -8,6 +8,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class chatTestClient extends JFrame{
+
+    /**
+     * 필드값에 대한 설명입니다.
+     */
     final private String userID;
     
     // 채팅방 GUI
@@ -22,10 +26,9 @@ public class chatTestClient extends JFrame{
         init();
     }
 
-    public static void main(String[] args) {
-        chatTestClient cl = new chatTestClient("user1");
-        cl.start();
-    }
+    /**
+     * 채팅방 Layout입니다.
+     */
     public void init() { // 새로운 창으로 띄워야 함 -> JFrame 생성 후 적용하기!
         setSize(400, 600); // 크기 지정
         setTitle("Movie Open Chatting Room(Network Project)"); // 제목
@@ -58,6 +61,10 @@ public class chatTestClient extends JFrame{
 
         setVisible(true);
     } // Client GUI
+
+    /**
+     * 스레드의 start()함수가 아닙니다!!! Client의 소켓을 생성해주고 채팅 내용을 전달하는 스레드를 호출하는 함수입니다.
+     */
     public void start() {
         Socket socket = null;
         BufferedReader in = null;
@@ -96,6 +103,10 @@ public class chatTestClient extends JFrame{
             }
         }
     } // 채팅 start!
+
+    /**
+     * Client에서 Server로 채팅 내용을 전달하고 Server로부터 여러 정보를 받아옵니다. (Runnable을 사용한 이유는 연습으로 만들어보았습니다.)
+     */
     class SendClientThread implements Runnable {
         Socket socket = null;
         String userID;

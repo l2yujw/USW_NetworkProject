@@ -5,7 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Client extends JFrame {
-
+    /**
+     * 필드값에 대한 설명입니다. 대부분 이름의 뜻과 같습니다.
+     */
     private static String userID;
     private JPanel search;
     private JLabel label_p1;
@@ -42,9 +44,12 @@ public class Client extends JFrame {
         checkID();
         new Client();
         chatTestClient client = new chatTestClient(userID);
-        client.start();
+        client.start(); // Client의 Socket를 만드는 start 함수임, Thread의 start함수가 아님!
     }
 
+    /**
+     * JFrame 생성합니다.
+     */
     public Client() {
         setSize(600, 700);
         setResizable(false);
@@ -55,6 +60,10 @@ public class Client extends JFrame {
         frameView();
         setVisible(true);
     }
+
+    /**
+     * 아이디를 생성할 때 중복 여부를 확인합니다. 중복 확인은 Server에서 합니다.
+     */
     public static void checkID() {
         boolean overlap;
 
@@ -70,6 +79,10 @@ public class Client extends JFrame {
             overlap = chatTestServer.overlapCheck(userID);
         }
     }
+
+    /**
+     * 초기 화면과 검색창에 영화 제목을 넣어 검색했을 때의 Layout을 구성합니다.
+     */
     private void frameView() {
         // 검색창 panel1
         search = new JPanel();
@@ -158,6 +171,10 @@ public class Client extends JFrame {
             }
         });
     }
+
+    /**
+     * 초기 화면에서 검색창에 영화 제목을 넣어 검색했을 때 Layout을 새롭게 배치합니다.
+     */
     private void recycle() {
         poster.removeAll();
         welcome.removeAll();
