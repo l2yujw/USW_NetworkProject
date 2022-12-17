@@ -3,11 +3,14 @@ package Test;
 import java.io.Serializable;
 
 public class Movie implements Serializable {
+    private static int REVIEW_SIZE = 5;
     private String movie_title;
     private String score_adc;
     private String score_spec;
     private String score_ntz;
+    private String summary;
     private String poster;
+    private String[][] review = new String[REVIEW_SIZE][4];
     private String review_score;
     private String review_reple;
     private String review_user;
@@ -44,6 +47,13 @@ public class Movie implements Serializable {
     public void setScore_ntz(String score_ntz) {
         this.score_ntz = score_ntz;
     }
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 
     public String getPoster() {
         return poster;
@@ -51,6 +61,14 @@ public class Movie implements Serializable {
 
     public void setPoster(String poster) {
         this.poster = poster;
+    }
+
+    public String[][] getReview() {
+        return review;
+    }
+
+    public void setReview(String[][] review) {
+        this.review = review;
     }
 
     public String getReview_score() {
