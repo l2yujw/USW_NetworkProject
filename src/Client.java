@@ -6,21 +6,16 @@ import java.awt.event.ActionListener;
 
 public class Client extends JFrame {
 
-    // firstView, recycle
     private static String userID;
     private JPanel search;
     private JLabel label_p1;
     private JTextField text_p1;
     private JButton btn1_p1;
-    private JButton btn2_p1;
-
     private JPanel poster;
     private JLabel[] label1_p2;
     private JLabel[] label2_p2;
-
     private JPanel welcome;
     private JLabel label_p3;
-
     // recycle
     private final JLabel movieposter = new JLabel();
     private final JLabel grade = new JLabel();
@@ -29,13 +24,11 @@ public class Client extends JFrame {
     private final JLabel gradeCritic = new JLabel("평론가");
     private final JLabel criticStar = new JLabel("6.08");
     private final JLabel gradeNetizen = new JLabel("네티즌");
-    private final  JLabel netizenStar = new JLabel("9.14");
+    private final JLabel netizenStar = new JLabel("9.14");
     private final JLabel gradeMy = new JLabel("내 평점");
     private final JLabel myStar = new JLabel("0.0");
-
     private final JTextArea story = new JTextArea("줄거리");
-
-    String header[] = {"아이디", "내용", "평점", "날짜" };
+    String header[] = {"아이디", "내용", "평점", "날짜"};
     String contents[][] = {{"hwang", "정말 재미있어요정말 재미있어요정말 재미있어요정말 재미있어요정말 재미있어요", "8/10", "2022-10-11"}};
     private final JScrollPane storyScroll = new JScrollPane(story);
     private final JTable review = new JTable(contents, header);
@@ -43,16 +36,13 @@ public class Client extends JFrame {
     private final JTextField score = new JTextField();
     private final JLabel score10 = new JLabel("/ 10");
     private final JButton registration = new JButton("등록");
-
     // panel3
     private final JTextArea reviewText = new JTextArea();
-
     public static void main(String[] args) {
         checkID();
         new Client();
         chatTestClient client = new chatTestClient(userID);
         client.start();
-        client.setVisible(false);
     }
 
     public Client() {
@@ -91,11 +81,9 @@ public class Client extends JFrame {
         label_p1 = new JLabel("검색창");
         text_p1 = new JTextField(38);
         btn1_p1 = new JButton("검색");
-        btn2_p1 = new JButton("채팅");
         search.add(label_p1);
         search.add(text_p1);
         search.add(btn1_p1);
-        search.add(btn2_p1);
         search.setBounds(0,0,600,50);
         search.setBorder(new LineBorder(Color.black));
 
@@ -238,7 +226,4 @@ public class Client extends JFrame {
         setVisible(false);
         setVisible(true);
     }
-
-
-
 }
