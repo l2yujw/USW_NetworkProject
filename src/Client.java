@@ -1,10 +1,31 @@
+import Test.CrawlingClientTest;
+import Test.Movie;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
+import java.net.Socket;
+import java.util.Scanner;
 
 public class Client extends JFrame {
+    /**
+     * 크롤링한 값을 저장할 변수입니다.
+     */
+    public static String search_title;
+    public static String movie_title;
+    public static String score_adc;
+    public static String score_spec;
+    public static String score_ntz;
+    public static String summary;
+    public static String poster_site;
+    public static String[][] review_sum;
+    public static String review_score;
+    public static String review_reple;
+    public static String review_user;
+    public static String review_date;
     /**
      * 필드값에 대한 설명입니다. 대부분 이름의 뜻과 같습니다.
      */
@@ -21,30 +42,75 @@ public class Client extends JFrame {
     // recycle
     private final JLabel movieposter = new JLabel();
     private final JLabel grade = new JLabel();
-    private final JLabel gradeAudience = new JLabel("관람객 ");
-    private final JLabel audienceStar = new JLabel("8.69");
-    private final JLabel gradeCritic = new JLabel("평론가");
-    private final JLabel criticStar = new JLabel("6.08");
-    private final JLabel gradeNetizen = new JLabel("네티즌");
-    private final JLabel netizenStar = new JLabel("9.14");
-    private final JLabel gradeMy = new JLabel("내 평점");
-    private final JLabel myStar = new JLabel("0.0");
-    private final JTextArea story = new JTextArea("줄거리");
-    String header[] = {"아이디", "내용", "평점", "날짜"};
-    String contents[][] = {{"hwang", "정말 재미있어요정말 재미있어요정말 재미있어요정말 재미있어요정말 재미있어요", "8/10", "2022-10-11"}};
-    private final JScrollPane storyScroll = new JScrollPane(story);
-    private final JTable review = new JTable(contents, header);
-    private final JScrollPane reviewScroll = new JScrollPane(review);
+//    private final JLabel gradeAudience = new JLabel("관람객 ");
+//    private final JLabel audienceStar = new JLabel("8.69");
+//    private final JLabel gradeCritic = new JLabel("평론가");
+//    private final JLabel criticStar = new JLabel("6.08");
+//    private final JLabel gradeNetizen = new JLabel("네티즌");
+//    private final JLabel netizenStar = new JLabel("9.14");
+//    private final JLabel gradeMy = new JLabel("내 평점");
+//    private final JLabel myStar = new JLabel("0.0");
+//    private final JTextArea story = new JTextArea("줄거리");
+//    String header[] = {"아이디", "내용", "평점", "날짜"};
+//    String contents[][] = {{"hwang", "정말 재미있어요정말 재미있어요정말 재미있어요정말 재미있어요정말 재미있어요", "8/10", "2022-10-11"}};
+//    private JTable review = new JTable(contents,header);
+//    private final JScrollPane storyScroll = new JScrollPane(story);
+//    private final JScrollPane reviewScroll = new JScrollPane(review);
     private final JTextField score = new JTextField();
     private final JLabel score10 = new JLabel("/ 10");
     private final JButton registration = new JButton("등록");
     // panel3
     private final JTextArea reviewText = new JTextArea();
+
     public static void main(String[] args) {
         checkID();
         new Client();
         chatTestClient client = new chatTestClient(userID);
         client.start(); // Client의 Socket를 만드는 start 함수임, Thread의 start함수가 아님!
+    }
+
+    public void CrawlingClient() {
+        try {
+            Socket socket = new Socket("localhost", 5000);
+
+            OutputStream os = socket.getOutputStream();
+            InputStream is = socket.getInputStream();
+
+            ObjectOutputStream oos = new ObjectOutputStream(os);
+            ObjectInputStream ois = new ObjectInputStream(is);
+
+            oos.writeObject(search_title);
+
+            MovieObj movieObj = (MovieObj) ois.readObject();
+            movie_title = movieObj.getMovie_title();
+            score_adc = movieObj.getScore_adc();
+            score_spec = movieObj.getScore_spec();
+            score_ntz = movieObj.getScore_ntz();
+            summary = movieObj.getSummary();
+            poster_site = movieObj.getPoster();
+            review_sum = movieObj.getReview();
+            review_score = movieObj.getReview_score();
+            review_reple = movieObj.getReview_reple();
+            review_user = movieObj.getReview_user();
+            review_date = movieObj.getReview_date();
+
+            System.out.println(movie_title);
+            System.out.println(score_adc + " " + score_spec + " " + score_ntz);
+            System.out.println(summary);
+            System.out.println(poster_site);
+            System.out.println();
+            for (int i=0; i<5; i++) {
+                System.out.println(review_sum[i][0]+ " " + review_sum[i][1] + " " + review_sum[i][2] + " " + review_sum[i][3]);
+            }
+
+
+        } catch (IOException e) {
+            System.out.println("오류");
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            System.out.println("오류");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -166,6 +232,7 @@ public class Client extends JFrame {
                     JOptionPane.showMessageDialog(getContentPane(), "검색어를 입력해주세요!");
                 }
                 else {
+                    search_title = text_p1.getText();
                     recycle();
                 }
             }
@@ -176,6 +243,25 @@ public class Client extends JFrame {
      * 초기 화면에서 검색창에 영화 제목을 넣어 검색했을 때 Layout을 새롭게 배치합니다.
      */
     private void recycle() {
+        CrawlingClient();
+        /**
+         * 크롤링한 값을 JFrame에 적용시킵니다.
+         */
+        String header[] = {"아이디", "내용", "평점", "날짜"};
+        JTable review = new JTable(review_sum,header);
+        JScrollPane reviewScroll = new JScrollPane(review);
+
+        JLabel gradeAudience = new JLabel("관람객 ");
+        JLabel audienceStar = new JLabel(score_adc);
+        JLabel gradeCritic = new JLabel("평론가");
+        JLabel criticStar = new JLabel(score_spec);
+        JLabel gradeNetizen = new JLabel("네티즌");
+        JLabel netizenStar = new JLabel(score_ntz);
+        JLabel gradeMy = new JLabel("내 평점");
+        JLabel myStar = new JLabel("0.0");
+        JTextArea story = new JTextArea(summary);
+        JScrollPane storyScroll = new JScrollPane(story);
+
         poster.removeAll();
         welcome.removeAll();
 
