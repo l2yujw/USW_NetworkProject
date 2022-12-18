@@ -139,12 +139,14 @@ public class webCrawling implements Runnable{
             if (doc_movie.select(".con_tx").size() > 0) {
                 summary = doc_movie.select(".con_tx").first().text();
             } // 줄거리
+            System.out.println(summary);
 
             System.out.println("줄거리: " + summary);
 
             poster = el_movie.select(".poster img").attr("src"); // 영화 포스터 URL
             poster = poster.substring(0,poster.lastIndexOf("?"));
             System.out.println("포스터: " + poster);
+
 //            System.out.println();
 
 /*
