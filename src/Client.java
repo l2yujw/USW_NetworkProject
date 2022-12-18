@@ -14,6 +14,10 @@ public class Client extends JFrame {
     /**
      * 크롤링한 값을 저장할 변수입니다.
      */
+    public static String main_title;
+    public static String main_poster;
+    public static String main_code;
+    public static String[][] main_sum = new String[6][3];
     public static String search_title;
     public static String movie_title;
     public static String score_adc;
@@ -68,6 +72,30 @@ public class Client extends JFrame {
         chatTestClient client = new chatTestClient(userID);
         client.start(); // Client의 Socket를 만드는 start 함수임, Thread의 start함수가 아님!
     }
+
+    public void CrawlingRankClient(){
+        try {
+            Socket socket = new Socket("localhost", 4000);
+
+            OutputStream os = socket.getOutputStream();
+            InputStream is = socket.getInputStream();
+
+            ObjectOutputStream oos = new ObjectOutputStream(os);
+            ObjectInputStream ois = new ObjectInputStream(is);
+
+            MovieRankObj movieRankObj = (MovieRankObj) ois.readObject();
+            main_title = movieRankObj.getMain_title();
+            main_poster = movieRankObj.getMain_poster();
+            main_code = movieRankObj.getMain_code();
+            main_sum = movieRankObj.getMain_sum();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public void CrawlingClient() {
         try {
@@ -151,6 +179,7 @@ public class Client extends JFrame {
      */
     private void frameView() {
         // 검색창 panel1
+        CrawlingRankClient();
         search = new JPanel();
         poster = new JPanel();
         poster.setLayout(null);
@@ -173,34 +202,40 @@ public class Client extends JFrame {
             label1_p2[i] = new JLabel();
             label2_p2[i] = new JLabel();
             if (i == 0) {
-                label1_p2[0].setBounds(45, 55, 160, 200);
-                label2_p2[0].setBounds(45, 40, 160, 15);
-                label2_p2[0].setText("1순위 : 영화이름"); // 영화이름 1차원 배열 설정 후 삽입
+                label1_p2[i].setBounds(45, 55, 160, 200);
+                label2_p2[i].setText(main_sum[i][1]);
+                label2_p2[i].setBounds(45, 40, 160, 15);
+                label2_p2[i].setText("1순위 : " + main_sum[i][0]); // 영화이름 1차원 배열 설정 후 삽입
             }
             if (i == 1) {
-                label1_p2[1].setBounds(215, 55, 160, 200);
-                label2_p2[1].setBounds(215, 40, 160, 15);
-                label2_p2[1].setText("2순위 : 영화이름");
+                label1_p2[i].setBounds(215, 55, 160, 200);
+                label2_p2[i].setText(main_sum[i][1]);
+                label2_p2[i].setBounds(215, 40, 160, 15);
+                label2_p2[i].setText("2순위 : " + main_sum[i][0]);
             }
             if (i == 2) {
-                label1_p2[2].setBounds(385, 55, 160, 200);
-                label2_p2[2].setBounds(385, 40, 160, 15);
-                label2_p2[2].setText("3순위 : 영화이름");
+                label1_p2[i].setBounds(385, 55, 160, 200);
+                label2_p2[i].setText(main_sum[i][1]);
+                label2_p2[i].setBounds(385, 40, 160, 15);
+                label2_p2[i].setText("3순위 : " + main_sum[i][0]);
             }
             if (i == 3) {
-                label1_p2[3].setBounds(45, 280, 160, 200);
-                label2_p2[3].setBounds(45, 265, 160, 15);
-                label2_p2[3].setText("4순위 : 영화이름");
+                label1_p2[i].setBounds(45, 280, 160, 200);
+                label2_p2[i].setText(main_sum[i][1]);
+                label2_p2[i].setBounds(45, 265, 160, 15);
+                label2_p2[i].setText("4순위 : " + main_sum[i][0]);
             }
             if (i == 4) {
-                label1_p2[4].setBounds(215, 280, 160, 200);
-                label2_p2[4].setBounds(215, 265, 160, 15);
-                label2_p2[4].setText("5순위 : 영화이름");
+                label1_p2[i].setBounds(215, 280, 160, 200);
+                label2_p2[i].setText(main_sum[i][1]);
+                label2_p2[i].setBounds(215, 265, 160, 15);
+                label2_p2[i].setText("5순위 : " + main_sum[i][0]);
             }
             if (i == 5) {
-                label1_p2[5].setBounds(385, 280, 160, 200);
-                label2_p2[5].setBounds(385, 265, 160, 15);
-                label2_p2[5].setText("6순위 : 영화이름");
+                label1_p2[i].setBounds(385, 280, 160, 200);
+                label2_p2[i].setText(main_sum[i][1]);
+                label2_p2[i].setBounds(385, 265, 160, 15);
+                label2_p2[i].setText("6순위 : " + main_sum[i][0]);
             }
             label1_p2[i].setBorder(new LineBorder(Color.black));
             // 포스터 넣기
