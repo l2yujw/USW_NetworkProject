@@ -145,7 +145,7 @@ public class webCrawling implements Runnable{
             poster = el_movie.select(".poster img").attr("src"); // 영화 포스터 URL
             poster = poster.substring(0,poster.lastIndexOf("?"));
             System.out.println("포스터: " + poster);
-            System.out.println();
+//            System.out.println();
 
 /*
             Elements info = el.select(".info_spec > dd").first().select("span"); // 영화 정보 - 장르, 제작국, 러닝타임, 개봉날짜
