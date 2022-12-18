@@ -2,16 +2,19 @@ import java.io.Serializable;
 
 /**
  * 검색한 영화에대한 객체입니다.
+ * page, REVIEWSIZE 변환시 webCrawling 같게 변환
  */
 public class MovieObj implements Serializable {
-    private static int REVIEW_SIZE = 5;
+
+    private static int REVIEW_SIZE = 10;
     private String movie_title;
     private String score_adc;
     private String score_spec;
     private String score_ntz;
     private String summary;
     private String poster;
-    private String[][] review = new String[REVIEW_SIZE][4];
+    private int page = 2;
+    private String[][] review = new String[REVIEW_SIZE*page][4];
     private String review_user;
     private String review_reple;
     private String review_score;

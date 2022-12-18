@@ -40,7 +40,7 @@ public class WebCrawlingTest implements Runnable{
             doc_code = Jsoup.connect(url_code).get();
 
             Element el_search = doc_code.select(".search_list_1").get(0);// 검색 결과들
-            String movie_code_sub = String.valueOf(el_search.select(".result_thumb > a").get(2));// 검색 결과중 n번째 결과
+            String movie_code_sub = String.valueOf(el_search.select(".result_thumb > a").get(1));// 검색 결과중 n번째 결과
             int code_start = movie_code_sub.indexOf("code=");
             int code_end = movie_code_sub.indexOf("\"><img");
 
@@ -58,6 +58,40 @@ public class WebCrawlingTest implements Runnable{
             throw new RuntimeException(e);
         }
 
+        String url_review = "https://movie.naver.com/movie/bi/mi/pointWriteFormList.naver?code=+"+movie_code+"&type=after&isActualPointWriteExecute=false&isMileageSubscriptionAlready=false&isMileageSubscriptionReject=false#";// 영화 정보
+
+        Document doc_review = null;
+
+        try {
+            doc_review = Jsoup.connect(url_review).get();
+            System.out.println(doc_review);
+
+            for (int i=0; i<REVIEW_SIZE; i++) {
+                Element el_review = doc_review.select(".score_result > ul > li").get(i);// 리뷰 선택
+
+                Element reple_user = el_review.select(".score_reple > dl > dt > em").get(0);
+                review_user = reple_user.text();// 리뷰 작성자
+                review[i][0] = review_user;
+
+                Element score_reple = el_review.select(".score_reple > p").get(0);
+                review_reple = score_reple.text();// 리뷰
+                review[i][1] = review_reple;
+                System.out.println(review_reple);
+
+                Element star_score = el_review.select(".star_score").get(0);
+                review_score = star_score.text();// 리뷰 점수
+                review[i][2] = review_score;
+
+                Element reple_date = el_review.select(".score_reple > dl > dt > em").get(1);
+                review_date = reple_date.text();// 리뷰 작성일
+                review[i][3] = review_date;
+
+                System.out.println(review_score + " : " + review_reple + " " + review_user + " " + review_date);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         String url = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+movie_code;// 영화 정보
 
         Document doc_movie = null;
@@ -71,13 +105,18 @@ public class WebCrawlingTest implements Runnable{
             System.out.println("타이틀: " + movie_title);
 
             Element score_main = el_movie.select(".main_score").get(0);
-            Elements score_all = score_main.select(".star_score"); // 평점
+            Elements score_ntz_all = score_main.select(".ntz_score").select(".star_score > em"); // 평점
+            score_adc = score_ntz_all.text();
+            score_adc = score_adc.replaceAll(" ","");
 
-            String score_adc_sub = score_all.get(0).text();
-            score_adc = score_adc_sub.substring(score_adc_sub.length()-4,score_adc_sub.length()); // 관람객
-            score_spec = score_all.get(1).text(); // 평론가
-            score_ntz = score_all.get(2).text(); // 네티즌
+            Elements score_spec_all = score_main.select(".spc").select(".star_score > em"); // 평점
+            score_spec = score_spec_all.text().replaceAll(" ", ""); // 평론가
 
+            Elements score_adc_all = score_main.select("#pointNetizenPersentBasic > em"); // 평점
+            System.out.println(score_adc_all);
+            score_ntz = score_adc_all.text().replaceAll(" ","");
+            System.out.println(score_ntz);
+//            score_ntz = score_all.get(2).text(); // 네티즌
 //            Element score_ntz = score_main.select()
             System.out.println("관람객:"+ score_adc + " 기자*평론가:" + score_spec + " 네티즌:" + score_ntz);
 
@@ -93,27 +132,7 @@ public class WebCrawlingTest implements Runnable{
             System.out.println();
 
 
-            for (int i=0; i<REVIEW_SIZE; i++) {
-                Element el_review = doc_movie.select(".score_result > ul > li").get(i);// 리뷰 선택
 
-                Element star_score = el_review.select(".star_score").get(0);
-                review_score = star_score.text();// 리뷰 점수
-                review[i][0] = review_score;
-
-                Element score_reple = el_review.select(".score_reple > p").get(0);
-                review_reple = score_reple.text();// 리뷰
-                review[i][1] = review_reple;
-
-                Element reple_user = el_review.select(".score_reple > dl > dt > em").get(0);
-                review_user = reple_user.text();// 리뷰 작성자
-                review[i][2] = review_user;
-
-                Element reple_date = el_review.select(".score_reple > dl > dt > em").get(1);
-                review_date = reple_date.text();// 리뷰 작성일
-                review[i][3] = review_date;
-
-                System.out.println(review_score + " : " + review_reple + " " + review_user + " " + review_date);
-            }
 
 /*
             Elements info = el.select(".info_spec > dd").first().select("span"); // 영화 정보 - 장르, 제작국, 러닝타임, 개봉날짜

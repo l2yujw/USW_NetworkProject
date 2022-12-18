@@ -27,20 +27,29 @@ public class webCrawlingRank implements Runnable{
                 Element el_main = doc_main.select(".list_ranking > tbody > tr").get(i);
                 main_title = el_main.select(".tit3").text();// 영화명
                 main_sum[i-1][0] = main_title;
-                main_poster = el_main.select(".ac img").attr("src"); // 순위 사진
-                main_sum[i-1][1] = main_poster;
 
                 String code_main_sub = el_main.select(".tit3 a").attr("href");
                 int code_start_main = code_main_sub.indexOf("code=");
                 main_code = code_main_sub.substring(code_start_main+5,code_main_sub.length());// 선택한 영화 코드
                 main_sum[i-1][2] = main_code;
 
-                System.out.println(main_poster);
+                String url = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+main_code;// 영화 정보
+
+                Document doc_movie = null;
+
+                doc_movie = Jsoup.connect(url).get();
+                Element el_movie = doc_movie.select(".mv_info_area").get(0);
+
+                main_sum[i-1][1] = el_movie.select(".poster img").attr("src"); // 영화 포스터 URL
+                main_sum[i-1][1] = main_sum[i-1][1].substring(0,main_sum[i-1][1].lastIndexOf("?"));
+
+
                 System.out.println(main_title + ": " +main_code);
                 System.out.println();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 }
