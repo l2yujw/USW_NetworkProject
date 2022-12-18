@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -18,8 +19,6 @@ public class Client extends JFrame {
      * 크롤링한 값을 저장할 변수입니다.
      */
     public static String main_title;
-    public static String main_poster;
-    public static String main_code;
     public static String[][] main_sum = new String[6][3];
     public static String search_title;
     public static String movie_title;
@@ -69,7 +68,7 @@ public class Client extends JFrame {
     // panel3
     private final JTextArea reviewText = new JTextArea();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         checkID();
         new Client();
         chatTestClient client = new chatTestClient(userID);
@@ -91,8 +90,6 @@ public class Client extends JFrame {
 
             MovieRankObj movieRankObj = (MovieRankObj) ois.readObject();
             main_title = movieRankObj.getMain_title();
-            main_poster = movieRankObj.getMain_poster();
-            main_code = movieRankObj.getMain_code();
             main_sum = movieRankObj.getMain_sum();
 
         } catch (IOException e) {
@@ -152,7 +149,7 @@ public class Client extends JFrame {
     /**
      * JFrame 생성합니다.
      */
-    public Client() {
+    public Client() throws InterruptedException {
         setSize(600, 700);
         setResizable(false);
         setLocationRelativeTo(null); // Frame 화면 가운데 위치
@@ -185,9 +182,10 @@ public class Client extends JFrame {
     /**
      * 초기 화면과 검색창에 영화 제목을 넣어 검색했을 때의 Layout을 구성합니다.
      */
-    private void frameView() {
+    private void frameView() throws InterruptedException {
         // 검색창 panel1
         CrawlingRankClient();
+
         search = new JPanel();
         poster = new JPanel();
         poster.setLayout(null);
@@ -209,39 +207,42 @@ public class Client extends JFrame {
         for(int i = 0; i<6; i++) { // 영화 포스터 삽입 + 영화 제목 삽입
             label1_p2[i] = new JLabel();
             label2_p2[i] = new JLabel();
+            Thread cp = new Thread(new FileCopy(main_sum[i][1],main_sum[i][0]));
+            cp.start();
+            cp.join();
             if (i == 0) {
                 label1_p2[i].setBounds(45, 55, 160, 200);
-                label1_p2[i].setText(main_sum[i][1]);//현재는 포스터가 있는 웹사이트 주소
+                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));//이미지 대입
                 label2_p2[i].setBounds(45, 40, 160, 15);
                 label2_p2[i].setText("1순위 : " + main_sum[i][0]); // 영화이름 1차원 배열 설정 후 삽입
             }
             if (i == 1) {
                 label1_p2[i].setBounds(215, 55, 160, 200);
-                label1_p2[i].setText(main_sum[i][1]);
+                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));
                 label2_p2[i].setBounds(215, 40, 160, 15);
                 label2_p2[i].setText("2순위 : " + main_sum[i][0]);
             }
             if (i == 2) {
                 label1_p2[i].setBounds(385, 55, 160, 200);
-                label1_p2[i].setText(main_sum[i][1]);
+                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));
                 label2_p2[i].setBounds(385, 40, 160, 15);
                 label2_p2[i].setText("3순위 : " + main_sum[i][0]);
             }
             if (i == 3) {
                 label1_p2[i].setBounds(45, 280, 160, 200);
-                label1_p2[i].setText(main_sum[i][1]);
+                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));
                 label2_p2[i].setBounds(45, 265, 160, 15);
                 label2_p2[i].setText("4순위 : " + main_sum[i][0]);
             }
             if (i == 4) {
                 label1_p2[i].setBounds(215, 280, 160, 200);
-                label1_p2[i].setText(main_sum[i][1]);
+                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));
                 label2_p2[i].setBounds(215, 265, 160, 15);
                 label2_p2[i].setText("5순위 : " + main_sum[i][0]);
             }
             if (i == 5) {
                 label1_p2[i].setBounds(385, 280, 160, 200);
-                label1_p2[i].setText(main_sum[i][1]);
+                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));
                 label2_p2[i].setBounds(385, 265, 160, 15);
                 label2_p2[i].setText("6순위 : " + main_sum[i][0]);
             }
@@ -290,6 +291,14 @@ public class Client extends JFrame {
      */
     private void recycle() {
         CrawlingClient();
+        Thread test = new Thread(new FileCopy(poster_site,movie_title));
+        test.start();
+        try {
+            test.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         /**
          * 크롤링한 값을 JFrame에 적용시킵니다.
          */
@@ -304,7 +313,7 @@ public class Client extends JFrame {
         JLabel gradeNetizen = new JLabel("네티즌");
         JLabel netizenStar = new JLabel(score_ntz);
         JLabel gradeMy = new JLabel("내 평점");
-        JLabel myStar = new JLabel("0.0");
+        JLabel myStar = new JLabel("0.00");
         JTextArea story = new JTextArea(summary);
         JScrollPane storyScroll = new JScrollPane(story);
 
@@ -313,7 +322,8 @@ public class Client extends JFrame {
 
         movieposter.setBounds(5, 3, 295, 270);
         movieposter.setBorder(new LineBorder(Color.black));
-        movieposter.setText(poster_site);//현재는 포스터가 있는 웹사이트 주소
+        movieposter.setIcon(new ImageIcon(file.getAbsolutePath()));
+//        movieposter.setText(poster_site);//현재는 포스터가 있는 웹사이트 주소
         poster.add(movieposter);
 
         grade.setBounds(301, 3, 280, 90);
@@ -374,5 +384,60 @@ public class Client extends JFrame {
 
         setVisible(false);
         setVisible(true);
+    }
+
+    File file, file2;
+    BufferedOutputStream fos;
+
+    /**
+     * path_name에 자신의 파일 위치에 맞는 주소로 변환해야합니다.
+     * Url 이미지를 저장합니다.
+     */
+    class FileCopy implements Runnable{
+
+        public static String urlstr;
+        public static String file_name;
+        public FileCopy(String url,String title) {
+            urlstr = url;
+            file_name = title.replaceAll(" ","_").replaceAll(":","");//공백 변경, 사용불가 문자 제거
+
+        }
+
+        @Override
+        public void run() {
+            try{
+                java.net.URL url = new java.net.URL(urlstr);
+                InputStream is = url.openStream();
+
+                // 해당 url과 노드 연결된 입력 스트림을 반환한다.
+                BufferedInputStream bis = new BufferedInputStream(is);
+                String path_name = "C:/Users/RJW/IdeaProjects/USW_NetworkProject/recommendMovie/"+file_name+".png";// 파일경로 지정
+                file = new File(path_name);
+
+                BufferedOutputStream bos = null;
+                //중복체크
+                if (!file.exists()) {
+//                    file2 = new File("C:/Users/RJW/IdeaProjects/USW_NetworkProject/recommeqendMovie/"+file_name+".jpg");
+                    fos = new BufferedOutputStream(new FileOutputStream(file));
+                    bos = new BufferedOutputStream(fos);
+
+                    int input=0;
+                    byte[] data = new byte[3000];
+                    while((input = bis.read(data))!=-1){
+                        bos.write(data, 0, input);
+                        bos.flush();
+                    }
+
+                    bis.close(); bos.close();
+                    is.close(); fos.close();
+                }
+
+
+            }catch(MalformedURLException e){
+                e.printStackTrace();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 }
