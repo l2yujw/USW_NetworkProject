@@ -2,6 +2,9 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * 영화랭킹 정보를 제공합니다.
+ */
 public class CrawlingRankServer {
     public CrawlingRankServer(){
         try {
@@ -28,7 +31,7 @@ public class CrawlingRankServer {
             movieRankObj.setMain_sum(webCrawlingRank.main_sum);
 
 
-            oos.writeObject(movieRankObj);
+            oos.writeObject(movieRankObj);//영화 랭킹 정보를 제공
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {

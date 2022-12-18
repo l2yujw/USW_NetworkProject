@@ -2,6 +2,9 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * 검색한 영화에 대한 정보를 받아 결과를 제공해줍니다.
+ */
 public class CrawlingServer {
     public CrawlingServer() {
         try {
@@ -17,7 +20,7 @@ public class CrawlingServer {
             ObjectOutputStream oos = new ObjectOutputStream(os);
 
             String search_title;
-            search_title = (String) ois.readObject();
+            search_title = (String) ois.readObject();//Client가 검색한 영화
 
             Thread thread = new Thread(new webCrawling(search_title));
             thread.start();
@@ -36,7 +39,7 @@ public class CrawlingServer {
             movie.setReview_user(webCrawling.review_user);
             movie.setReview_date(webCrawling.review_date);
 
-            oos.writeObject(movie);
+            oos.writeObject(movie);//검색한 영화에 대한 정보 제공
 
 
 //            Member member = (Member) ois.readObject();

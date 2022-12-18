@@ -1,5 +1,8 @@
 import java.io.Serializable;
 
+/**
+ * 영화랭킹 객체입니다.
+ */
 public class MovieRankObj implements Serializable {
     private String main_title;
     private String main_poster;

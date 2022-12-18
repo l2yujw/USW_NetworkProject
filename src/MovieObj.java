@@ -1,5 +1,8 @@
 import java.io.Serializable;
 
+/**
+ * 검색한 영화에대한 객체입니다.
+ */
 public class MovieObj implements Serializable {
     private static int REVIEW_SIZE = 5;
     private String movie_title;

@@ -10,6 +10,10 @@ public class webCrawlingRank implements Runnable{
     public static String main_title;
     public static String main_code;
     public static String[][] main_sum = new String[6][3];
+
+    /**
+     * 영화랭킹 정보를 제공합니다.
+     */
     @Override
     public void run() {
         String url_main = "https://movie.naver.com/movie/sdb/rank/rmovie.naver";// 영화 랭킹

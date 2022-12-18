@@ -25,20 +25,22 @@ public class webCrawling implements Runnable{
         this.search_title = search_title;
     }
 
-
+    /**
+     * 검색한 영화에대한 정보를 제공합니다.
+     */
     @Override
     public void run() {
 //        search_title = "어벤져스";// 검색어
         String url_code = "https://movie.naver.com/movie/search/result.naver?section=movie&query="+"어벤져스";
 
         Document doc_code = null;
-        String movie_code;
+        String movie_code;//영화 코드
 
         try {
             doc_code = Jsoup.connect(url_code).get();
 
             Element el_search = doc_code.select(".search_list_1").get(0);// 검색 결과들
-            String movie_code_sub = String.valueOf(el_search.select(".result_thumb > a").get(2));// 검색 결과중 n번째 결과
+            String movie_code_sub = String.valueOf(el_search.select(".result_thumb > a").get(1));// 검색 결과중 n번째 결과
             int code_start = movie_code_sub.indexOf("code=");
             int code_end = movie_code_sub.indexOf("\"><img");
 

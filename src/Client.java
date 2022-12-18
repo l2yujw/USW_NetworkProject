@@ -10,6 +10,9 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * CrawlingServer, CrawlingRankServer, chatTestServer 가동후 실행
+ */
 public class Client extends JFrame {
     /**
      * 크롤링한 값을 저장할 변수입니다.
@@ -73,6 +76,9 @@ public class Client extends JFrame {
         client.start(); // Client의 Socket를 만드는 start 함수임, Thread의 start함수가 아님!
     }
 
+    /**
+     * CrawlingRankServer로부터 값을 받아옵니다.
+     */
     public void CrawlingRankClient(){
         try {
             Socket socket = new Socket("localhost", 4000);
@@ -96,7 +102,9 @@ public class Client extends JFrame {
         }
     }
 
-
+    /**
+     * CrawlingServer로부터 값을 받아옵니다.
+     */
     public void CrawlingClient() {
         try {
             Socket socket = new Socket("localhost", 5000);
@@ -122,14 +130,14 @@ public class Client extends JFrame {
             review_user = movieObj.getReview_user();
             review_date = movieObj.getReview_date();
 
-            System.out.println(movie_title);
-            System.out.println(score_adc + " " + score_spec + " " + score_ntz);
-            System.out.println(summary);
-            System.out.println(poster_site);
-            System.out.println();
-            for (int i=0; i<5; i++) {
-                System.out.println(review_sum[i][0]+ " " + review_sum[i][1] + " " + review_sum[i][2] + " " + review_sum[i][3]);
-            }
+//            System.out.println(movie_title);
+//            System.out.println(score_adc + " " + score_spec + " " + score_ntz);
+//            System.out.println(summary);
+//            System.out.println(poster_site);
+//            System.out.println();
+//            for (int i=0; i<5; i++) {
+//                System.out.println(review_sum[i][0]+ " " + review_sum[i][1] + " " + review_sum[i][2] + " " + review_sum[i][3]);
+//            }
 
 
         } catch (IOException e) {
@@ -203,37 +211,37 @@ public class Client extends JFrame {
             label2_p2[i] = new JLabel();
             if (i == 0) {
                 label1_p2[i].setBounds(45, 55, 160, 200);
-                label2_p2[i].setText(main_sum[i][1]);
+                label1_p2[i].setText(main_sum[i][1]);//현재는 포스터가 있는 웹사이트 주소
                 label2_p2[i].setBounds(45, 40, 160, 15);
                 label2_p2[i].setText("1순위 : " + main_sum[i][0]); // 영화이름 1차원 배열 설정 후 삽입
             }
             if (i == 1) {
                 label1_p2[i].setBounds(215, 55, 160, 200);
-                label2_p2[i].setText(main_sum[i][1]);
+                label1_p2[i].setText(main_sum[i][1]);
                 label2_p2[i].setBounds(215, 40, 160, 15);
                 label2_p2[i].setText("2순위 : " + main_sum[i][0]);
             }
             if (i == 2) {
                 label1_p2[i].setBounds(385, 55, 160, 200);
-                label2_p2[i].setText(main_sum[i][1]);
+                label1_p2[i].setText(main_sum[i][1]);
                 label2_p2[i].setBounds(385, 40, 160, 15);
                 label2_p2[i].setText("3순위 : " + main_sum[i][0]);
             }
             if (i == 3) {
                 label1_p2[i].setBounds(45, 280, 160, 200);
-                label2_p2[i].setText(main_sum[i][1]);
+                label1_p2[i].setText(main_sum[i][1]);
                 label2_p2[i].setBounds(45, 265, 160, 15);
                 label2_p2[i].setText("4순위 : " + main_sum[i][0]);
             }
             if (i == 4) {
                 label1_p2[i].setBounds(215, 280, 160, 200);
-                label2_p2[i].setText(main_sum[i][1]);
+                label1_p2[i].setText(main_sum[i][1]);
                 label2_p2[i].setBounds(215, 265, 160, 15);
                 label2_p2[i].setText("5순위 : " + main_sum[i][0]);
             }
             if (i == 5) {
                 label1_p2[i].setBounds(385, 280, 160, 200);
-                label2_p2[i].setText(main_sum[i][1]);
+                label1_p2[i].setText(main_sum[i][1]);
                 label2_p2[i].setBounds(385, 265, 160, 15);
                 label2_p2[i].setText("6순위 : " + main_sum[i][0]);
             }
@@ -260,6 +268,9 @@ public class Client extends JFrame {
         add(poster);
         add(welcome);
 
+        /**
+         * 영화 검색
+         */
         btn1_p1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -302,6 +313,7 @@ public class Client extends JFrame {
 
         movieposter.setBounds(5, 3, 295, 270);
         movieposter.setBorder(new LineBorder(Color.black));
+        movieposter.setText(poster_site);//현재는 포스터가 있는 웹사이트 주소
         poster.add(movieposter);
 
         grade.setBounds(301, 3, 280, 90);
@@ -340,7 +352,6 @@ public class Client extends JFrame {
         reviewScroll.setBounds(5, 275, 576, 222);
         reviewScroll.setBorder(new LineBorder(Color.black));
         poster.add(reviewScroll);
-
 
 
         welcome.setLayout(null);
