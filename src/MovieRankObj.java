@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class MovieRankObj implements Serializable {
     private String main_title;
     private String main_poster;
-    private String main_code;
+
     private String[][] main_sum = new String[6][3];
 
     public String getMain_title() {
@@ -23,14 +23,6 @@ public class MovieRankObj implements Serializable {
 
     public void setMain_poster(String main_poster) {
         this.main_poster = main_poster;
-    }
-
-    public String getMain_code() {
-        return main_code;
-    }
-
-    public void setMain_code(String main_code) {
-        this.main_code = main_code;
     }
 
     public String[][] getMain_sum() {

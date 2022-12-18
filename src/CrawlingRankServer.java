@@ -27,7 +27,6 @@ public class CrawlingRankServer {
             MovieRankObj movieRankObj = new MovieRankObj();
             movieRankObj.setMain_title(webCrawlingRank.main_title);
             movieRankObj.setMain_poster(webCrawlingRank.main_poster);
-            movieRankObj.setMain_code(webCrawlingRank.main_code);
             movieRankObj.setMain_sum(webCrawlingRank.main_sum);
 
 
