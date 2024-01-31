@@ -2,9 +2,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class buttonError extends JFrame {
+public class ButtonError extends JFrame {
     JButton btn = new JButton("시작");
-    public buttonError () {
+    public ButtonError() {
         setSize(600, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(btn);
@@ -13,14 +13,14 @@ public class buttonError extends JFrame {
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                chatTestClient client = new chatTestClient("user1");
+                ChatTestClient client = new ChatTestClient("user1");
                 client.start(); // 스레드의 start가 아님!!! 채팅창 gui 시작 start!
             }
         });
     }
 
     public static void main(String[] args) {
-        new buttonError();
+        new ButtonError();
     }
 
 

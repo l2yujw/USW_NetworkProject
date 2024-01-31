@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class chatTestClient extends JFrame{
+public class ChatTestClient extends JFrame{
 
     /**
      * 필드값에 대한 설명입니다.
@@ -21,7 +21,7 @@ public class chatTestClient extends JFrame{
     final private JTextField fieldMsg = new JTextField();
     final private JButton sendBtn = new JButton("보내기");
 
-    public chatTestClient(String userID) {
+    public ChatTestClient(String userID) {
         this.userID = userID;
         init();
     }

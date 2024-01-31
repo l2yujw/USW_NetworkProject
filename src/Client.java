@@ -1,6 +1,3 @@
-import Test.CrawlingClientTest;
-import Test.Movie;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -9,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.Socket;
-import java.util.Scanner;
 
 /**
  * CrawlingServer, CrawlingRankServer, chatTestServer 가동후 실행
@@ -71,7 +67,7 @@ public class Client extends JFrame {
     public static void main(String[] args) throws InterruptedException {
         checkID();
         new Client();
-        chatTestClient client = new chatTestClient(userID);
+        ChatTestClient client = new ChatTestClient(userID);
         client.start(); // Client의 Socket를 만드는 start 함수임, Thread의 start함수가 아님!
     }
 
@@ -88,7 +84,7 @@ public class Client extends JFrame {
             ObjectOutputStream oos = new ObjectOutputStream(os);
             ObjectInputStream ois = new ObjectInputStream(is);
 
-            MovieRankObj movieRankObj = (MovieRankObj) ois.readObject();
+            MovieRank movieRankObj = (MovieRank) ois.readObject();
             main_title = movieRankObj.getMain_title();
             main_sum = movieRankObj.getMain_sum();
 
@@ -114,7 +110,7 @@ public class Client extends JFrame {
 
             oos.writeObject(search_title);
 
-            MovieObj movieObj = (MovieObj) ois.readObject();
+            Movie movieObj = (Movie) ois.readObject();
             movie_title = movieObj.getMovie_title();
             score_adc = movieObj.getScore_adc();
             score_spec = movieObj.getScore_spec();
@@ -172,10 +168,10 @@ public class Client extends JFrame {
                 userID = JOptionPane.showInputDialog("아이디를 입력해주세요!");
             }
         }
-        overlap = chatTestServer.overlapCheck(userID);
+        overlap = ChatTestServer.overlapCheck(userID);
         while (overlap) {
             userID = JOptionPane.showInputDialog("이미 사용중인 아아디입니다. 다른 아이디를 입력해주세요!");
-            overlap = chatTestServer.overlapCheck(userID);
+            overlap = ChatTestServer.overlapCheck(userID);
         }
     }
 

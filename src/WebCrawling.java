@@ -9,7 +9,7 @@ import java.io.IOException;
  * 영화 관련 필요한 정보를 가져옵니다.
  * page,REVIEWSIZE 변환시 MovieObj 같게 변환
  */
-public class webCrawling implements Runnable{
+public class WebCrawling implements Runnable{
     private static int REVIEW_SIZE = 10;
 
     public static String search_title;
@@ -28,7 +28,7 @@ public class webCrawling implements Runnable{
     public static String summary;
 
 
-    public webCrawling(String search_title) {
+    public WebCrawling(String search_title) {
         this.search_title = search_title;
     }
 

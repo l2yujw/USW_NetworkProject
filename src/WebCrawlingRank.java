@@ -4,7 +4,7 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 
-public class webCrawlingRank implements Runnable{
+public class WebCrawlingRank implements Runnable{
 
     public static String main_poster;
     public static String main_title;

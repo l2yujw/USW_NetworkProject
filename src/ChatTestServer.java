@@ -1,6 +1,3 @@
-import Test.Movie;
-import Test.WebCrawlingTest;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,7 +9,7 @@ import java.util.List;
  * 이곳은 Server 입니다.
  * 아직 DB구현은 하지 않은 상태입니다.
  */
-public class chatTestServer {
+public class ChatTestServer {
     /**
      * 필드값에 대한 설명입니다.
      * 아직 DB를 활용하지 않아서 UserList를 Client로부터 받아서 저장합니다.
@@ -20,7 +17,7 @@ public class chatTestServer {
     static ArrayList<String> userList = new ArrayList<>(); // DB에 저장된 UserList ID 받아와서 저장
 
     public static void main(String[] args) {
-        chatTestServer server = new chatTestServer();
+        ChatTestServer server = new ChatTestServer();
         server.serverStart();
     }
 

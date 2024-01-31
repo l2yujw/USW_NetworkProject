@@ -22,22 +22,22 @@ public class CrawlingServer {
             String search_title;
             search_title = (String) ois.readObject();//Client가 검색한 영화
 
-            Thread thread = new Thread(new webCrawling(search_title));
+            Thread thread = new Thread(new WebCrawling(search_title));
             thread.start();
             thread.join();
 
-            MovieObj movie = new MovieObj();
-            movie.setMovie_title(webCrawling.movie_title);
-            movie.setScore_adc(webCrawling.score_adc);
-            movie.setScore_spec(webCrawling.score_spec);
-            movie.setScore_ntz(webCrawling.score_ntz);
-            movie.setSummary(webCrawling.summary);
-            movie.setPoster(webCrawling.poster);
-            movie.setReview(webCrawling.review);
-            movie.setReview_score(webCrawling.review_score);
-            movie.setReview_reple(webCrawling.review_reple);
-            movie.setReview_user(webCrawling.review_user);
-            movie.setReview_date(webCrawling.review_date);
+            Movie movie = new Movie();
+            movie.setMovie_title(WebCrawling.movie_title);
+            movie.setScore_adc(WebCrawling.score_adc);
+            movie.setScore_spec(WebCrawling.score_spec);
+            movie.setScore_ntz(WebCrawling.score_ntz);
+            movie.setSummary(WebCrawling.summary);
+            movie.setPoster(WebCrawling.poster);
+            movie.setReview(WebCrawling.review);
+            movie.setReview_score(WebCrawling.review_score);
+            movie.setReview_reple(WebCrawling.review_reple);
+            movie.setReview_user(WebCrawling.review_user);
+            movie.setReview_date(WebCrawling.review_date);
 
             oos.writeObject(movie);//검색한 영화에 대한 정보 제공
 
