@@ -1,21 +1,53 @@
 # Network Programming(Movie Review)
-## 1. Idea
+
+
+
+## 💭 Idea
 ![img.png](image_readme/idea.png)
 
-## 2. Web Crawling
-#### 네이버 영화 서비스 종료
-![image](https://github.com/l2yujw/l2yujw/assets/49338509/b6b600d8-8816-496f-87af-9b84c5e7e447)
-![image](https://github.com/l2yujw/l2yujw/assets/49338509/20ded4b8-1786-4485-8dda-666b4a547a4e)
 
-## 3. Chatting
-![image](https://github.com/l2yujw/l2yujw/assets/49338509/5cdd34ae-3cf9-4a12-9b5e-5d00c892081e)
-![image](https://github.com/l2yujw/l2yujw/assets/49338509/e372623b-b5dc-49e8-8b03-d12a186943c5)
+# 🎸Result
 
-##개발 언어와 사용 기법
-UI : Java
+|  |  |
+| --- | --- |
+| <img width="600" src="https://github.com/l2yujw/USW_NetworkProject/assets/49338509/12b71c6f-6300-40be-9f63-b195421e39fc"> | <img width="600" src="https://github.com/l2yujw/USW_NetworkProject/assets/49338509/31ce4daa-8cd2-4368-9ab1-c352d2fab651"> |
+| <img width="600" src="https://github.com/l2yujw/USW_NetworkProject/assets/49338509/4746ee1f-d53e-449c-b6c5-fa2766545696"> | <img width="600" src="https://github.com/l2yujw/USW_NetworkProject/assets/49338509/8d717a9e-684b-4dc6-a74e-8512cea478d1"> |
 
-server & client : 소켓 프로그래밍을 이용, JAVA / 채팅 서버와 영화 서비스 서버를 분리
+<br>
 
-WebCrawling : 
+---
 
-Chat : 
+<br><br>
+
+# ✅ Architecture & Stack
+
+Language : Java
+
+UI : Jframe
+
+Server & Client : JAVA / Socket Programming
+
+<br><br>
+
+# ✅ WebCrawling : 
+  - 네이버 영화 서비스 종료
+
+  ```java
+    크롤링 코드
+  ```
+
+<br><br>
+
+# ✅ Chat
+
+  ```java
+    채팅 코드
+  ```
+
+<br><br>
+
+# ✅ Server & Client
+
+  ```java
+    서버 클라이언트 코드와 설명
+  ```
