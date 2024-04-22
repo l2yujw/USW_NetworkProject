@@ -1,8 +1,8 @@
 # Network Programming(Movie Review)
 
+<br>
 
-
-## 💭 Idea
+# 💭 Idea
 ![img.png](image_readme/idea.png)
 
 
