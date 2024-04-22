@@ -1,10 +1,12 @@
+package server;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 
-public class WebCrawlingRank implements Runnable{
+public class MovieRankCrawling implements Runnable{
 
     public static String main_poster;
     public static String main_title;

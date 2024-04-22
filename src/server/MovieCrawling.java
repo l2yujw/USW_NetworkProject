@@ -1,3 +1,5 @@
+package server;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,7 +11,7 @@ import java.io.IOException;
  * 영화 관련 필요한 정보를 가져옵니다.
  * page,REVIEWSIZE 변환시 MovieObj 같게 변환
  */
-public class WebCrawling implements Runnable{
+public class MovieCrawling implements Runnable{
     private static int REVIEW_SIZE = 10;
 
     public static String search_title;
@@ -28,7 +30,7 @@ public class WebCrawling implements Runnable{
     public static String summary;
 
 
-    public WebCrawling(String search_title) {
+    public MovieCrawling(String search_title) {
         this.search_title = search_title;
     }
 
@@ -54,14 +56,6 @@ public class WebCrawling implements Runnable{
 
             movie_code = movie_code_sub.substring(code_start+5,code_end);// 선택한 영화 코드
 
-//            System.out.println(movie_code_sub);
-//            System.out.println();
-
-//            System.out.println(movie_code_sub);
-//            System.out.println(code_start);
-//            System.out.println(code_end);
-//            System.out.println(movie_code);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -69,14 +63,12 @@ public class WebCrawling implements Runnable{
         /**
          * 영화 리뷰를 받아옵니다.
          */
-
         try {
             for (int k=0; k<page; k++) {
                 String url_review = "https://movie.naver.com/movie/bi/mi/pointWriteFormList.naver?code=+"+movie_code+"&type=after&isActualPointWriteExecute=false&isMileageSubscriptionAlready=false&isMileageSubscriptionReject=false#&page="+(page+1);// 영화 정보
 
                 Document doc_review = null;
                 doc_review = Jsoup.connect(url_review).get();
-//                System.out.println(doc_review);
 
                 for (int i=0; i<REVIEW_SIZE; i++) {
                     Element el_review = doc_review.select(".score_result > ul > li").get(i);// 리뷰 선택
@@ -84,12 +76,10 @@ public class WebCrawling implements Runnable{
                     Element reple_user = el_review.select(".score_reple > dl > dt > em").get(0);
                     review_user = reple_user.text();// 리뷰 작성자
                     review[i+k*REVIEW_SIZE][0] = review_user;
-//                    System.out.println(review[i+k*REVIEW_SIZE][0]);
 
                     Element score_reple = el_review.select(".score_reple > p").get(0);
                     review_reple = score_reple.text();// 리뷰
                     review[i+k*REVIEW_SIZE][1] = review_reple;
-//                    System.out.println(review_reple);
 
                     Element star_score = el_review.select(".star_score").get(0);
                     review_score = star_score.text();// 리뷰 점수
@@ -99,7 +89,6 @@ public class WebCrawling implements Runnable{
                     review_date = reple_date.text();// 리뷰 작성일
                     review[i+k*REVIEW_SIZE][3] = review_date;
 
-                    System.out.println(review_score + " : " + review_reple + " " + review_user + " " + review_date);
                 }
             }
         } catch (IOException e) {
@@ -133,7 +122,6 @@ public class WebCrawling implements Runnable{
             System.out.println(score_adc_all);
             score_ntz = score_adc_all.text().replaceAll(" ","");
 
-//            Element score_ntz = score_main.select()
             System.out.println("관람객:"+ score_adc + " 기자*평론가:" + score_spec + " 네티즌:" + score_ntz);
 
             if (doc_movie.select(".con_tx").size() > 0) {
