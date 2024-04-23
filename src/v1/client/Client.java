@@ -1,8 +1,8 @@
-package client;
+package v1.client;
 
-import server.ChatServer;
-import server.dto.MovieDto;
-import server.dto.MovieRankDto;
+import v1.server.ChatServer;
+import v1.server.dto.MovieDto;
+import v1.server.dto.MovieRankDto;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

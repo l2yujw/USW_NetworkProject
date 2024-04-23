@@ -1,7 +1,7 @@
-package server.threads;
+package v1.server.threads;
 
-import server.MovieRankCrawling;
-import server.dto.MovieRankDto;
+import v1.server.MovieRankCrawling;
+import v1.server.dto.MovieRankDto;
 
 import java.io.*;
 import java.net.Socket;

@@ -1,4 +1,4 @@
-package test;
+package v1.testnaver;
 
 import java.io.*;
 import java.net.Socket;

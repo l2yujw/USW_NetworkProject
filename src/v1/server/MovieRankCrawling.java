@@ -1,4 +1,4 @@
-package server;
+package v1.server;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

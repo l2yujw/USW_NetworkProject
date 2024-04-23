@@ -1,4 +1,4 @@
-package server;
+package v1.server;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -54,7 +54,7 @@ public class ChatServer {
             serverSocket = new ServerSocket(6000);
 
             while (true) {
-                System.out.println("Waiting client.Client...");
+                System.out.println("Waiting v1.client.Client...");
                 socket = serverSocket.accept();
 
                 // Client가 접속할 때마다 새로운 Thread를 생성한다.

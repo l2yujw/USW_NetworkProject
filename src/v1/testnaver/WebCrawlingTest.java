@@ -1,4 +1,4 @@
-package test;
+package v1.testnaver;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

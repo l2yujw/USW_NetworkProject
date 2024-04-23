@@ -1,4 +1,4 @@
-package test;
+package v1.testnaver;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -11,7 +11,7 @@ public class CrawlingServerTest {
             System.out.println("서버 가동됨");
             Socket socket = serverSocket.accept();
             System.out.println("클라이언트 연결 접수됨...");
-            System.out.println("[client] : " + socket.getInetAddress());
+            System.out.println("[v1.client] : " + socket.getInetAddress());
 
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();

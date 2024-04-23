@@ -1,25 +1,19 @@
-package server.dto;
+package v1.testnaver;
 
 import java.io.Serializable;
 
-/**
- * 검색한 영화에대한 객체입니다.
- * page, REVIEWSIZE 변환시 webCrawling 같게 변환
- */
-public class MovieDto implements Serializable {
-
-    private static int REVIEW_SIZE = 10;
+public class Movie implements Serializable {
+    private static int REVIEW_SIZE = 5;
     private String movie_title;
     private String score_adc;
     private String score_spec;
     private String score_ntz;
     private String summary;
     private String poster;
-    private int page = 2;
-    private String[][] review = new String[REVIEW_SIZE*page][4];
-    private String review_user;
-    private String review_reple;
+    private String[][] review = new String[REVIEW_SIZE][4];
     private String review_score;
+    private String review_reple;
+    private String review_user;
     private String review_date;
 
     public String getMovie_title() {
@@ -77,12 +71,12 @@ public class MovieDto implements Serializable {
         this.review = review;
     }
 
-    public String getReview_user() {
-        return review_user;
+    public String getReview_score() {
+        return review_score;
     }
 
-    public void setReview_user(String review_user) {
-        this.review_user = review_user;
+    public void setReview_score(String review_score) {
+        this.review_score = review_score;
     }
 
     public String getReview_reple() {
@@ -93,12 +87,12 @@ public class MovieDto implements Serializable {
         this.review_reple = review_reple;
     }
 
-    public String getReview_score() {
-        return review_score;
+    public String getReview_user() {
+        return review_user;
     }
 
-    public void setReview_score(String review_score) {
-        this.review_score = review_score;
+    public void setReview_user(String review_user) {
+        this.review_user = review_user;
     }
 
     public String getReview_date() {

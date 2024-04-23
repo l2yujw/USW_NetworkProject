@@ -25,7 +25,7 @@ Language : Java
 
 UI : Jframe
 
-Server & client.Client : JAVA / Socket Programming
+Server & v1.client.Client : JAVA / Socket Programming
 
 <br><br>
 
@@ -46,7 +46,7 @@ Server & client.Client : JAVA / Socket Programming
 
 <br><br>
 
-# ✅ Server & client.Client
+# ✅ Server & v1.client.Client
 
   ```java
     서버 클라이언트 코드와 설명

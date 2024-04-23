@@ -1,12 +1,11 @@
-package server.threads;
+package v1.server.threads;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import server.MovieCrawling;
-import server.MovieRankCrawling;
-import server.dto.MovieDto;
-import server.dto.MovieRankDto;
+import v1.server.MovieCrawling;
+import v1.server.dto.MovieDto;
+import v1.server.dto.MovieRankDto;
 
 import java.io.*;
 import java.net.Socket;

@@ -1,8 +1,5 @@
 package tests.server;
 
-import server.threads.MovieCrawlingThread;
-import tests.crawling.CrawlingThread;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,7 +17,7 @@ public class CrawlingServer {
             serverSocket = new ServerSocket(5000);
             System.out.println("서버 가동됨");
             while (true) {
-                System.out.println("Waiting client.Client...");
+                System.out.println("Waiting v1.client.Client...");
                 socket = serverSocket.accept();
 
 //                CrawlingThread crawlingThread = new CrawlingThread(socket);

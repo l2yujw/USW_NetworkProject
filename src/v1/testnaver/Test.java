@@ -1,4 +1,4 @@
-package test;
+package v1.testnaver;
 
 public class Test {
     public static void main(String[] args) {

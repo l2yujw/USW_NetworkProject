@@ -1,4 +1,4 @@
-package client;
+package v1.client;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -62,7 +62,7 @@ public class ChatClient extends JFrame{
         add(sendBtn);
 
         setVisible(true);
-    } // client.Client GUI
+    } // v1.client.Client GUI
 
     /**
      * 스레드의 start()함수가 아닙니다!!! Client의 소켓을 생성해주고 채팅 내용을 전달하는 스레드를 호출하는 함수입니다.
@@ -141,5 +141,5 @@ public class ChatClient extends JFrame{
                 e.printStackTrace();
             }
         }
-    } // Server로 보내는 client.Client 정보 (채팅용 스레드)
+    } // Server로 보내는 v1.client.Client 정보 (채팅용 스레드)
 }
