@@ -1,4 +1,4 @@
-package tests;
+package tests.crawling;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -17,6 +17,8 @@ public class MovieCrawling {
         try {
             Document doc = conn.get();
             Elements movieList = doc.getElementsByClass("movieBox-item");
+
+
 
             for (Element element : movieList) {
                 System.out.println(element.select("a img").attr("src"));
