@@ -1,4 +1,4 @@
-package tests.crawling;
+package v2.crawling;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;

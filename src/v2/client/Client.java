@@ -1,4 +1,4 @@
-package tests.client;
+package v2.client;
 
 import v1.client.ChatClient;
 import v1.server.ChatServer;

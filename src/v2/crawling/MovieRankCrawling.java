@@ -1,4 +1,4 @@
-package tests.crawling;
+package v2.crawling;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

@@ -1,4 +1,4 @@
-package tests.dto;
+package v2.dto;
 
 import java.io.Serializable;
 
