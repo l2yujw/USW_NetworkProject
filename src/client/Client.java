@@ -1,3 +1,9 @@
+package client;
+
+import server.ChatServer;
+import server.dto.MovieDto;
+import server.dto.MovieRankDto;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -64,41 +70,28 @@ public class Client extends JFrame {
     // panel3
     private final JTextArea reviewText = new JTextArea();
 
+    private final Socket socket;
+
+    {
+        try {
+            socket = new Socket("localhost", 5000);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public static void main(String[] args) throws InterruptedException {
         checkID();
         new Client();
-        ChatTestClient client = new ChatTestClient(userID);
+        ChatClient client = new ChatClient(userID);
         client.start(); // Client의 Socket를 만드는 start 함수임, Thread의 start함수가 아님!
     }
 
     /**
      * CrawlingRankServer로부터 값을 받아옵니다.
      */
-    public void CrawlingRankClient(){
-        try {
-            Socket socket = new Socket("localhost", 4000);
-
-            OutputStream os = socket.getOutputStream();
-            InputStream is = socket.getInputStream();
-
-            ObjectOutputStream oos = new ObjectOutputStream(os);
-            ObjectInputStream ois = new ObjectInputStream(is);
-
-            MovieRank movieRankObj = (MovieRank) ois.readObject();
-            main_title = movieRankObj.getMain_title();
-            main_sum = movieRankObj.getMain_sum();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * CrawlingServer로부터 값을 받아옵니다.
-     */
-    public void CrawlingClient() {
+    public void getMovieInf(){
         try {
             Socket socket = new Socket("localhost", 5000);
 
@@ -108,9 +101,30 @@ public class Client extends JFrame {
             ObjectOutputStream oos = new ObjectOutputStream(os);
             ObjectInputStream ois = new ObjectInputStream(is);
 
+            MovieRankDto movieRankObj = (MovieRankDto) ois.readObject();
+            main_title = movieRankObj.getTitle();
+//            main_sum = movieRankObj.getMain_sum();
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * CrawlingServer로부터 값을 받아옵니다.
+     */
+    public void getMovieDetail() {
+        try {
+
+            OutputStream os = socket.getOutputStream();
+            InputStream is = socket.getInputStream();
+
+            ObjectOutputStream oos = new ObjectOutputStream(os);
+            ObjectInputStream ois = new ObjectInputStream(is);
+
             oos.writeObject(search_title);
 
-            Movie movieObj = (Movie) ois.readObject();
+            MovieDto movieObj = (MovieDto) ois.readObject();
             movie_title = movieObj.getMovie_title();
             score_adc = movieObj.getScore_adc();
             score_spec = movieObj.getScore_spec();
@@ -168,10 +182,10 @@ public class Client extends JFrame {
                 userID = JOptionPane.showInputDialog("아이디를 입력해주세요!");
             }
         }
-        overlap = ChatTestServer.overlapCheck(userID);
+        overlap = ChatServer.overlapCheck(userID);
         while (overlap) {
             userID = JOptionPane.showInputDialog("이미 사용중인 아아디입니다. 다른 아이디를 입력해주세요!");
-            overlap = ChatTestServer.overlapCheck(userID);
+            overlap = ChatServer.overlapCheck(userID);
         }
     }
 
@@ -180,7 +194,7 @@ public class Client extends JFrame {
      */
     private void frameView() throws InterruptedException {
         // 검색창 panel1
-        CrawlingRankClient();
+        getMovieInf();
 
         search = new JPanel();
         poster = new JPanel();
@@ -286,7 +300,7 @@ public class Client extends JFrame {
      * 초기 화면에서 검색창에 영화 제목을 넣어 검색했을 때 Layout을 새롭게 배치합니다.
      */
     private void recycle() {
-        CrawlingClient();
+        getMovieDetail();
         Thread test = new Thread(new FileCopy(poster_site,movie_title));
         test.start();
         try {

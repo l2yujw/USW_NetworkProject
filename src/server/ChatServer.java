@@ -1,3 +1,5 @@
+package server;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -9,7 +11,7 @@ import java.util.List;
  * 이곳은 Server 입니다.
  * 아직 DB구현은 하지 않은 상태입니다.
  */
-public class ChatTestServer {
+public class ChatServer {
     /**
      * 필드값에 대한 설명입니다.
      * 아직 DB를 활용하지 않아서 UserList를 Client로부터 받아서 저장합니다.
@@ -17,7 +19,7 @@ public class ChatTestServer {
     static ArrayList<String> userList = new ArrayList<>(); // DB에 저장된 UserList ID 받아와서 저장
 
     public static void main(String[] args) {
-        ChatTestServer server = new ChatTestServer();
+        ChatServer server = new ChatServer();
         server.serverStart();
     }
 
@@ -52,7 +54,7 @@ public class ChatTestServer {
             serverSocket = new ServerSocket(6000);
 
             while (true) {
-                System.out.println("Waiting Client...");
+                System.out.println("Waiting client.Client...");
                 socket = serverSocket.accept();
 
                 // Client가 접속할 때마다 새로운 Thread를 생성한다.

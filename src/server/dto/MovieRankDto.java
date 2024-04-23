@@ -6,32 +6,32 @@ import java.io.Serializable;
  * 영화랭킹 객체입니다.
  */
 public class MovieRankDto implements Serializable {
-    private String main_title;
-    private String main_poster;
+    private String title;
+    private String poster;
 
-    private String[][] main_sum = new String[6][3];
+    private String url;
 
-    public String getMain_title() {
-        return main_title;
+    public String getTitle() {
+        return title;
     }
 
-    public void setMain_title(String main_title) {
-        this.main_title = main_title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getMain_poster() {
-        return main_poster;
+    public String getPoster() {
+        return poster;
     }
 
-    public void setMain_poster(String main_poster) {
-        this.main_poster = main_poster;
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 
-    public String[][] getMain_sum() {
-        return main_sum;
+    public String getUrl() {
+        return url;
     }
 
-    public void setMain_sum(String[][] main_sum) {
-        this.main_sum = main_sum;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

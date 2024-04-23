@@ -31,9 +31,9 @@ public class MovieRankCrawlingThread extends Thread{
         try {
             thread.join();
             MovieRankDto movieRankObj = new MovieRankDto();
-            movieRankObj.setMain_title(MovieRankCrawling.main_title);
-            movieRankObj.setMain_poster(MovieRankCrawling.main_poster);
-            movieRankObj.setMain_sum(MovieRankCrawling.main_sum);
+//            movieRankObj.setMain_title(MovieRankCrawling.main_title);
+//            movieRankObj.setMain_poster(MovieRankCrawling.main_poster);
+//            movieRankObj.setMain_sum(MovieRankCrawling.main_sum);
 
 
             oos.writeObject(movieRankObj);//영화 랭킹 정보를 제공

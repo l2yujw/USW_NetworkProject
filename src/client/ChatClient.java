@@ -1,3 +1,5 @@
+package client;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -7,7 +9,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ChatTestClient extends JFrame{
+public class ChatClient extends JFrame{
 
     /**
      * 필드값에 대한 설명입니다.
@@ -21,7 +23,7 @@ public class ChatTestClient extends JFrame{
     final private JTextField fieldMsg = new JTextField();
     final private JButton sendBtn = new JButton("보내기");
 
-    public ChatTestClient(String userID) {
+    public ChatClient(String userID) {
         this.userID = userID;
         init();
     }
@@ -60,7 +62,7 @@ public class ChatTestClient extends JFrame{
         add(sendBtn);
 
         setVisible(true);
-    } // Client GUI
+    } // client.Client GUI
 
     /**
      * 스레드의 start()함수가 아닙니다!!! Client의 소켓을 생성해주고 채팅 내용을 전달하는 스레드를 호출하는 함수입니다.
@@ -139,5 +141,5 @@ public class ChatTestClient extends JFrame{
                 e.printStackTrace();
             }
         }
-    } // Server로 보내는 Client 정보 (채팅용 스레드)
+    } // Server로 보내는 client.Client 정보 (채팅용 스레드)
 }
