@@ -10,15 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 이곳은 Server 입니다.
- * 아직 DB구현은 하지 않은 상태입니다.
- */
+
 public class ChatServer {
-    /**
-     * 필드값에 대한 설명입니다.
-     * 아직 DB를 활용하지 않아서 UserList를 Client로부터 받아서 저장합니다.
-     */
+
     static ArrayList<String> userList = new ArrayList<>(); // DB에 저장된 UserList ID 받아와서 저장
 
     public static void main(String[] args) {
@@ -57,7 +51,7 @@ public class ChatServer {
             serverSocket = new ServerSocket(6000);
 
             while (true) {
-                System.out.println("Waiting v1.client.Client...");
+                System.out.println("Waiting v2.Client...");
                 socket = serverSocket.accept();
 
                 // Client가 접속할 때마다 새로운 Thread를 생성한다.
@@ -86,13 +80,13 @@ public class ChatServer {
      * 내부 클래스로 선언된 스레드입니다. 클라이언트로부터 받아온 정보를 Server에서 정리한 뒤 모든 Client에게 전송합니다.
      * 웹 크롤링 / 채팅 정보를 전달합니다.
      */
-    class ReceiveClientThread extends Thread {
+    static class ReceiveClientThread extends Thread {
 
-        static List<PrintWriter> list = Collections.synchronizedList(new ArrayList<PrintWriter>());
+        static List<PrintWriter> list = Collections.synchronizedList(new ArrayList<>());
 
-        Socket socket = null;
-        BufferedReader in = null; //
-        PrintWriter out = null; // 각 Client들에게 보낼 채팅 내용 및 수정사항
+        Socket socket;
+        BufferedReader in = null;
+        PrintWriter out = null;
 
         /**
          * Client의 소켓으로부터 받아온 정보를 읽어오고 list에 userID를 추가합니다.
@@ -107,13 +101,8 @@ public class ChatServer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
 
-        /**
-         * 스레드의 run()함수입니다.
-         */
         @Override
         public void run() {
             String userID = "";
@@ -124,7 +113,7 @@ public class ChatServer {
                 userList.add(userID);
                 sendAll("[" + userID + "]님이 들어오셨습니다");
                 sendAll("사용자목록" + userList);
-                while (in != null) { // && userID != null
+                while (in != null) {
                     String inputMsg = in.readLine();
                     sendAll(userID + ">>" + inputMsg);
                 }
@@ -154,7 +143,7 @@ public class ChatServer {
                 out.println(s);
                 out.flush();
             }
-        } // 현재 PrintWriter에 등록된 Client들에게 메시지 전달.
-    } // Client들에게 userID와 chatting 내용을 받은 뒤 다시 Clent들에게 전송한다.
+        }
+    }
 }
 

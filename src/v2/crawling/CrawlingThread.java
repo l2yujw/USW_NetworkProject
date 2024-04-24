@@ -11,7 +11,6 @@ import v2.dto.MovieSearchDto;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CrawlingThread extends Thread {
 
@@ -37,7 +36,6 @@ public class CrawlingThread extends Thread {
     public void run() {
         try {
             String search = (String) ois.readObject();
-            System.out.println("search " + search);
             if (!search.equals("first")) {
                 //검색
                 movieSearchCrawling(search);
@@ -48,12 +46,15 @@ public class CrawlingThread extends Thread {
             ois.close();
             is.close();
             os.close();
-
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     *
+     * 초기 화면에 필요한 데이터 크롤링
+     */
     private void movieCrawling() throws IOException {
         String url = "https://www.moviechart.co.kr/rank/realtime/index/image";// 영화 랭킹
         Connection conn = Jsoup.connect(url);
@@ -78,6 +79,10 @@ public class CrawlingThread extends Thread {
         oos.close();
     }
 
+    /**
+     * @param search
+     * 영화 검색에 필요한 데이터 크롤링
+     */
     private void movieSearchCrawling(String search) throws IOException {
         String url = "https://www.moviechart.co.kr/search?search_keyword=" + search;// 영화 랭킹
         Connection connUrl = Jsoup.connect(url);
@@ -118,6 +123,10 @@ public class CrawlingThread extends Thread {
         oos.close();
     }
 
+    /**
+     *
+     * 찾고자 하는 정보의 이름이 일치하는지 체크
+     */
     private static boolean isEquals(Element element, String find) {
         return element.select("dl dd").text().equals(find);
     }

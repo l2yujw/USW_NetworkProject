@@ -1,11 +1,7 @@
 package v2.dto;
 
 import java.io.Serializable;
-import java.util.List;
 
-/**
- * 영화랭킹 객체입니다.
- */
 public class MovieDto implements Serializable {
     private String title;
 

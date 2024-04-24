@@ -20,15 +20,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * CrawlingServer, CrawlingRankServer, chatTestServer 가동후 실행
+ * ChatServer, CrawlingServer 가동 후 실행
  */
 public class Client extends JFrame {
-    /**
-     * 크롤링한 값을 저장할 변수입니다.
-     */
+
     public static List<String> mainTitle = new ArrayList<>();
     public static List<String> mainPoster = new ArrayList<>();
-
     public static String searchTitle;
     public static String movieScore;
     public static String genre;
@@ -36,6 +33,7 @@ public class Client extends JFrame {
     public static String summary;
     public static String posterUrl;
     public static String[][] review_sum;
+
     /**
      * 필드값에 대한 설명입니다. 대부분 이름의 뜻과 같습니다.
      */
@@ -48,15 +46,13 @@ public class Client extends JFrame {
     private JLabel[] labelPoster;
     private JLabel[] labelTitle;
     private JPanel welcome;
-    private JLabel label_p3;
-    // recycle
+    private JLabel labelUser;
+
     private final JLabel moviePoster = new JLabel();
     private final JLabel grade = new JLabel();
-    private final JLabel gradeGenre = new JLabel();
     private JComboBox<String> score;
     private final JLabel score10 = new JLabel("/ 10");
     private final JButton registration = new JButton("등록");
-    // panel3
     private final JTextArea reviewText = new JTextArea();
 
 
@@ -64,13 +60,13 @@ public class Client extends JFrame {
         checkID();
         new Client();
         ChatClient client = new ChatClient(userID);
-        client.start(); // Client의 Socket를 만드는 start 함수임, Thread의 start함수가 아님!
+        client.chatStart();
     }
 
     /**
      * JFrame 생성합니다.
      */
-    public Client() throws InterruptedException, IOException {
+    public Client() throws IOException {
         setSize(600, 700);
         setResizable(false);
         setLocationRelativeTo(null); // Frame 화면 가운데 위치
@@ -103,7 +99,7 @@ public class Client extends JFrame {
     /**
      * 초기 화면과 검색창에 영화 제목을 넣어 검색했을 때의 Layout을 구성합니다.
      */
-    private void frameView() throws InterruptedException, MalformedURLException {
+    private void frameView() throws MalformedURLException {
         // 검색창 panel1
         getMovieInf();
 
@@ -121,20 +117,19 @@ public class Client extends JFrame {
         search.setBounds(0,0,600,50);
         search.setBorder(new LineBorder(Color.black));
 
-        // 1 ~ 6순위 포스터 panel2
-        labelPoster = new JLabel[6]; // 포스터 사진
-        labelTitle = new JLabel[6]; // [순위]영화 제목
-        for(int i = 0; i<6; i++) { // 영화 포스터 삽입 + 영화 제목 삽입
+        // 1 ~ 6순위 포스터
+        labelPoster = new JLabel[6]; //포스터 사진
+        labelTitle = new JLabel[6]; //[순위]영화 제목
+        for(int i = 0; i<6; i++) {
             labelPoster[i] = new JLabel();
             labelTitle[i] = new JLabel();
-
 
             if (i == 0) {
                 labelPoster[i].setBounds(45, 55, 160, 200);
                 ImageIcon icon = imageSize(mainPoster.get(0));
-                labelPoster[i].setIcon(icon);//이미지 대입
+                labelPoster[i].setIcon(icon);
                 labelTitle[i].setBounds(45, 40, 160, 15);
-                labelTitle[i].setText("1순위 : " + mainTitle.get(0)); // 영화이름 1차원 배열 설정 후 삽입
+                labelTitle[i].setText("1순위 : " + mainTitle.get(0));
             }
             if (i == 1) {
                 labelPoster[i].setBounds(215, 55, 160, 200);
@@ -172,7 +167,7 @@ public class Client extends JFrame {
                 labelTitle[i].setText("6순위 : " + mainTitle.get(5));
             }
             labelPoster[i].setBorder(new LineBorder(Color.black));
-            // 포스터 넣기
+
             poster.add(labelPoster[i]);
             poster.add(labelTitle[i]);
 
@@ -181,12 +176,11 @@ public class Client extends JFrame {
         poster.setBounds(0, 50, 600, 500);
         poster.setBorder(new LineBorder(Color.black));
 
-
-        // 환영문구 panel3
-        label_p3 = new JLabel(userID + "님 방문을 환영합니다.");
-        label_p3.setFont(new Font("", Font.BOLD, 30));
-        label_p3.setHorizontalAlignment(JLabel.CENTER);
-        welcome.add(label_p3);
+        // 환영문구
+        labelUser = new JLabel(userID + "님 방문을 환영합니다.");
+        labelUser.setFont(new Font("", Font.BOLD, 30));
+        labelUser.setHorizontalAlignment(JLabel.CENTER);
+        welcome.add(labelUser);
         welcome.setBounds(0, 550, 600, 150);
         welcome.setBorder(new LineBorder(Color.black));
 
@@ -216,15 +210,15 @@ public class Client extends JFrame {
      * 초기 화면에서 검색창에 영화 제목을 넣어 검색했을 때 Layout을 새롭게 배치합니다.
      */
     private void searchView() throws MalformedURLException {
-        getMovieSearch();
+        getMovieSearch(); //검색 정보 요청
 
-        String scorebox[] = {"10", "9", "8", "7", "6", "5", "4", "3", "2", "1"};
-        score = new JComboBox<String>(scorebox);
+        String[] scoreBox = {"10", "9", "8", "7", "6", "5", "4", "3", "2", "1"};
+        score = new JComboBox<>(scoreBox);
 
         /**
          * 크롤링한 값을 JFrame에 적용시킵니다.
          */
-        String header[] = {"아이디", "내용", "평점", "날짜"};
+        String[] header = {"아이디", "내용", "평점", "날짜"};
 
         DefaultTableModel model = new DefaultTableModel(review_sum,header);
         JTable review = new JTable(model);
@@ -289,7 +283,6 @@ public class Client extends JFrame {
         reviewScroll.setBorder(new LineBorder(Color.black));
         poster.add(reviewScroll);
 
-
         welcome.setLayout(null);
         reviewText.setBounds(5, 4, 400, 105);
         score10.setBounds(510, 4, 75, 55);
@@ -301,42 +294,38 @@ public class Client extends JFrame {
         registration.setBounds(410, 61, 175, 50);
         welcome.add(score);
         welcome.add(score10);
-        welcome.add(registration);//등록버튼
+        welcome.add(registration);
         welcome.add(reviewText);
 
-        /**
-         * 리뷰를 등록합니다.
-         */
-        registration.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Date date = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.dd.MM HH:mm");
-                String review_date = formatter.format(date);
-                String inputStr[] = new String[4];
 
-                inputStr[0] = userID;
-                inputStr[1] = reviewText.getText();
-                inputStr[2] = score.getSelectedItem().toString();
-                inputStr[3] = review_date;
+        //리뷰를 등록합니다
+        registration.addActionListener(e -> {
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy.dd.MM HH:mm");
+            String review_date = formatter.format(date);
+            String inputStr[] = new String[4];
 
-                for(int i=0; i < review.getRowCount(); i++){
-                    if(review.getValueAt(i,0) == userID){
-                        model.removeRow(i);//같은 아이디로 이미 작성했으면 제거
-                        break;
-                    }
+            inputStr[0] = userID;
+            inputStr[1] = reviewText.getText();
+            inputStr[2] = score.getSelectedItem().toString();
+            inputStr[3] = review_date;
+
+            for(int i=0; i < review.getRowCount(); i++){
+                if(review.getValueAt(i,0) == userID){
+                    model.removeRow(i);//같은 아이디로 이미 작성했으면 제거
+                    break;
                 }
-
-                model.addRow(inputStr);
-
-                if (inputStr[2] == "10") {
-                    myStar.setText(inputStr[2] + ".0");
-                }else{
-                    myStar.setText(inputStr[2] + ".00");
-                }//내 점수 표시
-
-                reviewText.setText("");
             }
+
+            model.addRow(inputStr);
+
+            if (inputStr[2].equals("10")) {
+                myStar.setText(inputStr[2] + ".0");
+            }else{
+                myStar.setText(inputStr[2] + ".00");
+            }//내 점수 표시
+
+            reviewText.setText("");
         });
         add(poster);
         add(welcome);
@@ -346,7 +335,7 @@ public class Client extends JFrame {
     }
 
     /**
-     * CrawlingRankServer로부터 값을 받아옵니다.
+     * CrawlingServer 초기화면 관련한 데이터를 dto로 받아옵니다
      */
     public void getMovieInf(){
         try {
@@ -372,7 +361,7 @@ public class Client extends JFrame {
     }
 
     /**
-     * CrawlingServer로부터 값을 받아옵니다.
+     * CrawlingServer로부터 검색 결과값을 dto로 받아옵니다.
      */
     public void getMovieSearch() {
         try {
@@ -397,6 +386,10 @@ public class Client extends JFrame {
         }
     }
 
+    /**
+     *
+     * 초기화면과 검색화면의 포스터 이미지 크기를 설정합니다.
+     */
     private ImageIcon imageSize(String posterUrl) throws MalformedURLException {
         ImageIcon icon = new ImageIcon(new URL(posterUrl));
         Image img = icon.getImage();

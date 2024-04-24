@@ -11,13 +11,16 @@ import java.net.Socket;
  */
 public class CrawlingServer {
 
-    //Client에서 검색어를 받아서 넘김
+    /**
+     *
+     *  Client의 요청을 듣고만 있습니다.
+     */
     public static void main(String[] args) {
         ServerSocket serverSocket = null;
         Socket socket = null;
         try {
             serverSocket = new ServerSocket(5000);
-            System.out.println("서버 가동됨");
+            System.out.println("Server Check...");
             while (true) {
                 System.out.println("Waiting v2.Client...");
                 socket = serverSocket.accept();
