@@ -11,7 +11,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -101,7 +103,7 @@ public class Client extends JFrame {
     /**
      * 초기 화면과 검색창에 영화 제목을 넣어 검색했을 때의 Layout을 구성합니다.
      */
-    private void frameView() throws InterruptedException {
+    private void frameView() throws InterruptedException, MalformedURLException {
         // 검색창 panel1
         getMovieInf();
 
@@ -129,37 +131,43 @@ public class Client extends JFrame {
 
             if (i == 0) {
                 labelPoster[i].setBounds(45, 55, 160, 200);
-                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(0)));//이미지 대입
+                ImageIcon icon = imageSize(mainPoster.get(0));
+                labelPoster[i].setIcon(icon);//이미지 대입
                 labelTitle[i].setBounds(45, 40, 160, 15);
                 labelTitle[i].setText("1순위 : " + mainTitle.get(0)); // 영화이름 1차원 배열 설정 후 삽입
             }
             if (i == 1) {
                 labelPoster[i].setBounds(215, 55, 160, 200);
-                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(1)));
+                ImageIcon icon = imageSize(mainPoster.get(1));
+                labelPoster[i].setIcon(icon);
                 labelTitle[i].setBounds(215, 40, 160, 15);
                 labelTitle[i].setText("2순위 : " + mainTitle.get(1));
             }
             if (i == 2) {
                 labelPoster[i].setBounds(385, 55, 160, 200);
-                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(2)));
+                ImageIcon icon = imageSize(mainPoster.get(2));
+                labelPoster[i].setIcon(icon);
                 labelTitle[i].setBounds(385, 40, 160, 15);
                 labelTitle[i].setText("3순위 : " + mainTitle.get(2));
             }
             if (i == 3) {
                 labelPoster[i].setBounds(45, 280, 160, 200);
-                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(3)));
+                ImageIcon icon = imageSize(mainPoster.get(3));
+                labelPoster[i].setIcon(icon);
                 labelTitle[i].setBounds(45, 265, 160, 15);
                 labelTitle[i].setText("4순위 : " + mainTitle.get(3));
             }
             if (i == 4) {
                 labelPoster[i].setBounds(215, 280, 160, 200);
-                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(4)));
+                ImageIcon icon = imageSize(mainPoster.get(4));
+                labelPoster[i].setIcon(icon);
                 labelTitle[i].setBounds(215, 265, 160, 15);
                 labelTitle[i].setText("5순위 : " + mainTitle.get(4));
             }
             if (i == 5) {
                 labelPoster[i].setBounds(385, 280, 160, 200);
-                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(5)));
+                ImageIcon icon = imageSize(mainPoster.get(5));
+                labelPoster[i].setIcon(icon);
                 labelTitle[i].setBounds(385, 265, 160, 15);
                 labelTitle[i].setText("6순위 : " + mainTitle.get(5));
             }
@@ -194,7 +202,11 @@ public class Client extends JFrame {
                 }
                 else {
                     searchTitle = searchMovie.getText();
-                    searchView();
+                    try {
+                        searchView();
+                    } catch (MalformedURLException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         });
@@ -203,7 +215,7 @@ public class Client extends JFrame {
     /**
      * 초기 화면에서 검색창에 영화 제목을 넣어 검색했을 때 Layout을 새롭게 배치합니다.
      */
-    private void searchView() {
+    private void searchView() throws MalformedURLException {
         getMovieSearch();
 
         String scorebox[] = {"10", "9", "8", "7", "6", "5", "4", "3", "2", "1"};
@@ -218,12 +230,12 @@ public class Client extends JFrame {
         JTable review = new JTable(model);
         JScrollPane reviewScroll = new JScrollPane(review);
 
-        JLabel gradeAudience = new JLabel("관람객 ");
-        JLabel audienceStar = new JLabel("1");
-        JLabel gradeCritic = new JLabel("평론가");
-        JLabel criticStar = new JLabel("1");
-        JLabel gradeNetizen = new JLabel("네티즌");
-        JLabel netizenStar = new JLabel("1");
+        JLabel genreName = new JLabel("장르");
+        JLabel genreCheck = new JLabel(genre);
+        JLabel emptyName = new JLabel(" ");
+        JLabel empty = new JLabel(" ");
+        JLabel gradeName = new JLabel("평점");
+        JLabel gradeScore = new JLabel(movieScore);
         JLabel gradeMy = new JLabel("내 평점");
         JLabel myStar = new JLabel("0.00");
         JTextArea story = new JTextArea(summary);
@@ -235,28 +247,28 @@ public class Client extends JFrame {
 
         moviePoster.setBounds(5, 3, 295, 270);
         moviePoster.setBorder(new LineBorder(Color.black));
-        ImageIcon icon = imageSize2(posterUrl);
+        ImageIcon icon = imageSizeSearch(posterUrl);
         moviePoster.setIcon(icon);
-//        movieposter.setText(poster_site);//현재는 포스터가 있는 웹사이트 주소
         poster.add(moviePoster);
 
         grade.setBounds(301, 3, 280, 90);
         grade.setBorder(new LineBorder(Color.black));
         grade.setLayout(new GridLayout(2,4));
-        gradeAudience.setHorizontalAlignment(JLabel.LEFT);
-        audienceStar.setFont(new Font("", Font.BOLD, 25));
-        gradeCritic.setHorizontalAlignment(JLabel.LEFT);
-        criticStar.setFont(new Font("", Font.BOLD, 25));
-        gradeNetizen.setHorizontalAlignment(JLabel.LEFT);
-        netizenStar.setFont(new Font("", Font.BOLD, 25));
+        genreName.setHorizontalAlignment(JLabel.LEFT);
+        genreCheck.setFont(new Font("", Font.BOLD, 10));
+        genreCheck.setHorizontalAlignment(JLabel.LEFT);
+        empty.setHorizontalAlignment(JLabel.LEFT);
+        empty.setFont(new Font("", Font.BOLD, 25));
+        gradeName.setHorizontalAlignment(JLabel.LEFT);
+        gradeScore.setFont(new Font("", Font.BOLD, 25));
         gradeMy.setHorizontalAlignment(JLabel.LEFT);
         myStar.setFont(new Font("", Font.BOLD, 25));
-        grade.add(gradeAudience);
-        grade.add(audienceStar);
-        grade.add(gradeCritic);
-        grade.add(criticStar);
-        grade.add(gradeNetizen);
-        grade.add(netizenStar);
+        grade.add(genreName);
+        grade.add(genreCheck);
+        grade.add(emptyName);
+        grade.add(empty);
+        grade.add(gradeName);
+        grade.add(gradeScore);
         grade.add(gradeMy);
         grade.add(myStar);
         poster.add(grade);
@@ -346,7 +358,7 @@ public class Client extends JFrame {
             ObjectOutputStream oos = new ObjectOutputStream(os);
             ObjectInputStream ois = new ObjectInputStream(is);
 
-            oos.writeObject(null);
+            oos.writeObject("first");
 
             List<MovieDto> movieDtoList = (List<MovieDto>) ois.readObject();
 
@@ -381,16 +393,20 @@ public class Client extends JFrame {
             posterUrl = movieSearchDto.getPosterUrl();
 
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("오류");
             e.printStackTrace();
         }
     }
 
-    private ImageIcon imageSize2(String absolutePath) {
-        ImageIcon icon = new ImageIcon(absolutePath);
+    private ImageIcon imageSize(String posterUrl) throws MalformedURLException {
+        ImageIcon icon = new ImageIcon(new URL(posterUrl));
+        Image img = icon.getImage();
+        Image changeImg = img.getScaledInstance(160, 200, Image.SCALE_SMOOTH);
+        return new ImageIcon(changeImg);
+    }
+    private ImageIcon imageSizeSearch(String posterUrl) throws MalformedURLException {
+        ImageIcon icon = new ImageIcon(new URL(posterUrl));
         Image img = icon.getImage();
         Image changeImg = img.getScaledInstance(295, 270, Image.SCALE_SMOOTH);
-        ImageIcon changeIcon = new ImageIcon(changeImg);
-        return changeIcon;
+        return new ImageIcon(changeImg);
     }
 }

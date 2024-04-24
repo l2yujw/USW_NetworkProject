@@ -35,11 +35,10 @@ public class CrawlingThread extends Thread {
 
     @Override
     public void run() {
-        System.out.println("실행");
         try {
             String search = (String) ois.readObject();
-            System.out.println("search" + search);
-            if (search != null) {
+            System.out.println("search " + search);
+            if (!search.equals("first")) {
                 //검색
                 movieSearchCrawling(search);
             } else {
@@ -67,10 +66,13 @@ public class CrawlingThread extends Thread {
         for (int i = 0; i < 6; i++) {
             movieDtoList.add(
                     new MovieDto(
-                            movieList.get(i).select("a img").attr("src"),
-                            movieList.get(i).select("a img").attr("alt")
+                            movieList.get(i).select("a img").attr("alt"),
+                            movieList.get(i).select("a img").attr("src").substring(51)
                     )
             );
+        }
+        for (MovieDto movieDto : movieDtoList) {
+            System.out.println(movieDto.getTitle() + " " + movieDto.getPosterUrl());
         }
         oos.writeObject(movieDtoList);
         oos.close();
@@ -93,11 +95,14 @@ public class CrawlingThread extends Thread {
 
         Document docSearch = connSearchUrl.get();
         String posterUrl = docSearch.getElementsByClass("poster").select("a").attr("href");
-        System.out.println(posterUrl);
+        movieSearchDto.setPosterUrl(posterUrl);
 
-        Elements movieInf = doc.getElementsByClass("movieInerInfo-list depth").select("li dl");
+        Elements movieInf = docSearch.getElementsByClass("movieInerInfo-list depth").select("li dl");
 
-        for (Element element : movieInf) {
+
+        for (int i = 0; i < 4; i++) {
+            Element element = movieInf.get(i);
+            System.out.println(element);
             if (isEquals(element, "평점")) {
                 movieSearchDto.setScore(element.select("dt").text());
             }
@@ -106,7 +111,7 @@ public class CrawlingThread extends Thread {
             }
         }
 
-        String summary = doc.getElementsByClass("text").text();
+        String summary = docSearch.getElementsByClass("text").text();
         movieSearchDto.setSummary(summary);
 
         oos.writeObject(movieSearchDto);
@@ -114,6 +119,6 @@ public class CrawlingThread extends Thread {
     }
 
     private static boolean isEquals(Element element, String find) {
-        return element.select("dd").text().equals(find);
+        return element.select("dl dd").text().equals(find);
     }
 }
