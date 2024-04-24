@@ -167,7 +167,7 @@ public class Client extends JFrame {
         setTitle("Network Project(Movie Review)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 메모리 제거
         setLayout(null);
-        frameView();
+//        frameView();
         setVisible(true);
     }
 
@@ -193,7 +193,7 @@ public class Client extends JFrame {
     /**
      * 초기 화면과 검색창에 영화 제목을 넣어 검색했을 때의 Layout을 구성합니다.
      */
-    private void frameView() throws InterruptedException {
+    /*private void frameView() throws InterruptedException {
         // 검색창 panel1
         getMovieInf();
 
@@ -280,9 +280,9 @@ public class Client extends JFrame {
         add(poster);
         add(welcome);
 
-        /**
+        *//**
          * 영화 검색
-         */
+         *//*
         btn1_p1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -296,7 +296,7 @@ public class Client extends JFrame {
             }
         });
     }
-
+*/
     /**
      * 초기 화면에서 검색창에 영화 제목을 넣어 검색했을 때 Layout을 새롭게 배치합니다.
      */
@@ -333,7 +333,7 @@ public class Client extends JFrame {
 
         movieposter.setBounds(5, 3, 295, 270);
         movieposter.setBorder(new LineBorder(Color.black));
-        movieposter.setIcon(new ImageIcon(file.getAbsolutePath()));
+//        movieposter.setIcon(new ImageIcon(file.getAbsolutePath()));
 //        movieposter.setText(poster_site);//현재는 포스터가 있는 웹사이트 주소
         poster.add(movieposter);
 
@@ -397,7 +397,7 @@ public class Client extends JFrame {
         setVisible(true);
     }
 
-    File file, file2;
+//    File file, file2;
     BufferedOutputStream fos;
 
     /**
@@ -417,35 +417,32 @@ public class Client extends JFrame {
         @Override
         public void run() {
             try{
-                java.net.URL url = new java.net.URL(urlstr);
-                InputStream is = url.openStream();
+//                java.net.URL url = new java.net.URL(urlstr);
+//                InputStream is = url.openStream();
 
                 // 해당 url과 노드 연결된 입력 스트림을 반환한다.
-                BufferedInputStream bis = new BufferedInputStream(is);
-                String path_name = "C:/Users/RJW/IdeaProjects/USW_NetworkProject/recommendMovie/"+file_name+".png";// 파일경로 지정
-                file = new File(path_name);
-
-                BufferedOutputStream bos = null;
-                //중복체크
-                if (!file.exists()) {
+//                BufferedInputStream bis = new BufferedInputStream(is);
+//                String path_name = "C:/Users/RJW/IdeaProjects/USW_NetworkProject/recommendMovie/"+file_name+".png";// 파일경로 지정
+//                file = new File(path_name);
+//
+//                BufferedOutputStream bos = null;
+//                //중복체크
+//                if (!file.exists()) {
 //                    file2 = new File("C:/Users/RJW/IdeaProjects/USW_NetworkProject/recommeqendMovie/"+file_name+".jpg");
-                    fos = new BufferedOutputStream(new FileOutputStream(file));
-                    bos = new BufferedOutputStream(fos);
-
-                    int input=0;
-                    byte[] data = new byte[3000];
-                    while((input = bis.read(data))!=-1){
-                        bos.write(data, 0, input);
-                        bos.flush();
-                    }
-
-                    bis.close(); bos.close();
-                    is.close(); fos.close();
-                }
-
-
-            }catch(MalformedURLException e){
-                e.printStackTrace();
+//                    fos = new BufferedOutputStream(new FileOutputStream(file));
+//                    bos = new BufferedOutputStream(fos);
+//
+//                    int input=0;
+//                    byte[] data = new byte[3000];
+//                    while((input = bis.read(data))!=-1){
+//                        bos.write(data, 0, input);
+//                        bos.flush();
+//                    }
+//
+//                    bis.close(); bos.close();
+//                    is.close(); fos.close();
+                } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         }
     }
