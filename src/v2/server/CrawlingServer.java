@@ -1,5 +1,7 @@
 package v2.server;
 
+import v2.crawling.CrawlingThread;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,18 +19,20 @@ public class CrawlingServer {
             serverSocket = new ServerSocket(5000);
             System.out.println("서버 가동됨");
             while (true) {
-                System.out.println("Waiting v1.client.Client...");
+                System.out.println("Waiting v2.Client...");
                 socket = serverSocket.accept();
 
-//                CrawlingThread crawlingThread = new CrawlingThread(socket);
-//                crawlingThread.start();
+                CrawlingThread crawlingThread = new CrawlingThread(socket);
+                crawlingThread.start();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         finally {
             try {
-                serverSocket.close();
+                if (serverSocket != null) {
+                    serverSocket.close();
+                }
                 System.out.println("Sever Closed!");
             } catch (IOException e) {
                 e.printStackTrace();

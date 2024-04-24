@@ -47,7 +47,8 @@ public class MovieSearchCrawling {
                     movieSearchDto.setGenre(element.select("dt").text());
                 }
             }
-
+            String summary = doc.getElementsByClass("text").text();
+            System.out.println(summary);
         } catch (IOException e) {
             e.printStackTrace();
         }

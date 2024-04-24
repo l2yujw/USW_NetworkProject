@@ -11,6 +11,7 @@ public class MovieSearchDto implements Serializable {
     private String posterUrl;
     private String genre;
     private String score;
+    private String summary;
 
     public String getPosterUrl() {
         return posterUrl;
@@ -34,5 +35,13 @@ public class MovieSearchDto implements Serializable {
 
     public void setScore(String score) {
         this.score = score;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

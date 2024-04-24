@@ -1,18 +1,21 @@
 package v2.client;
 
-import v1.client.ChatClient;
-import v1.server.ChatServer;
-import v1.server.dto.MovieDto;
-import v1.server.dto.MovieRankDto;
+import v2.dto.MovieDto;
+import v2.dto.MovieSearchDto;
+import v2.server.ChatServer;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * CrawlingServer, CrawlingRankServer, chatTestServer 가동후 실행
@@ -21,68 +24,41 @@ public class Client extends JFrame {
     /**
      * 크롤링한 값을 저장할 변수입니다.
      */
-    public static String main_title;
-    public static String[][] main_sum = new String[6][3];
-    public static String search_title;
-    public static String movie_title;
-    public static String score_adc;
-    public static String score_spec;
-    public static String score_ntz;
+    public static List<String> mainTitle = new ArrayList<>();
+    public static List<String> mainPoster = new ArrayList<>();
+
+    public static String searchTitle;
+    public static String movieScore;
+    public static String genre;
+
     public static String summary;
-    public static String poster_site;
+    public static String posterUrl;
     public static String[][] review_sum;
-    public static String review_score;
-    public static String review_reple;
-    public static String review_user;
-    public static String review_date;
     /**
      * 필드값에 대한 설명입니다. 대부분 이름의 뜻과 같습니다.
      */
     private static String userID;
     private JPanel search;
-    private JLabel label_p1;
-    private JTextField text_p1;
-    private JButton btn1_p1;
+    private JLabel labelSearch;
+    private JTextField searchMovie;
+    private JButton btnSearch;
     private JPanel poster;
-    private JLabel[] label1_p2;
-    private JLabel[] label2_p2;
+    private JLabel[] labelPoster;
+    private JLabel[] labelTitle;
     private JPanel welcome;
     private JLabel label_p3;
     // recycle
-    private final JLabel movieposter = new JLabel();
+    private final JLabel moviePoster = new JLabel();
     private final JLabel grade = new JLabel();
-//    private final JLabel gradeAudience = new JLabel("관람객 ");
-//    private final JLabel audienceStar = new JLabel("8.69");
-//    private final JLabel gradeCritic = new JLabel("평론가");
-//    private final JLabel criticStar = new JLabel("6.08");
-//    private final JLabel gradeNetizen = new JLabel("네티즌");
-//    private final JLabel netizenStar = new JLabel("9.14");
-//    private final JLabel gradeMy = new JLabel("내 평점");
-//    private final JLabel myStar = new JLabel("0.0");
-//    private final JTextArea story = new JTextArea("줄거리");
-//    String header[] = {"아이디", "내용", "평점", "날짜"};
-//    String contents[][] = {{"hwang", "정말 재미있어요정말 재미있어요정말 재미있어요정말 재미있어요정말 재미있어요", "8/10", "2022-10-11"}};
-//    private JTable review = new JTable(contents,header);
-//    private final JScrollPane storyScroll = new JScrollPane(story);
-//    private final JScrollPane reviewScroll = new JScrollPane(review);
-    private final JTextField score = new JTextField();
+    private final JLabel gradeGenre = new JLabel();
+    private JComboBox<String> score;
     private final JLabel score10 = new JLabel("/ 10");
     private final JButton registration = new JButton("등록");
     // panel3
     private final JTextArea reviewText = new JTextArea();
 
-    private final Socket socket;
 
-    {
-        try {
-            socket = new Socket("localhost", 5000);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         checkID();
         new Client();
         ChatClient client = new ChatClient(userID);
@@ -90,84 +66,16 @@ public class Client extends JFrame {
     }
 
     /**
-     * CrawlingRankServer로부터 값을 받아옵니다.
-     */
-    public void getMovieInf(){
-        try {
-            Socket socket = new Socket("localhost", 5000);
-
-            OutputStream os = socket.getOutputStream();
-            InputStream is = socket.getInputStream();
-
-            ObjectOutputStream oos = new ObjectOutputStream(os);
-            ObjectInputStream ois = new ObjectInputStream(is);
-
-            MovieRankDto movieRankObj = (MovieRankDto) ois.readObject();
-            main_title = movieRankObj.getTitle();
-//            main_sum = movieRankObj.getMain_sum();
-
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * CrawlingServer로부터 값을 받아옵니다.
-     */
-    public void getMovieDetail() {
-        try {
-
-            OutputStream os = socket.getOutputStream();
-            InputStream is = socket.getInputStream();
-
-            ObjectOutputStream oos = new ObjectOutputStream(os);
-            ObjectInputStream ois = new ObjectInputStream(is);
-
-            oos.writeObject(search_title);
-
-            MovieDto movieObj = (MovieDto) ois.readObject();
-            movie_title = movieObj.getMovie_title();
-            score_adc = movieObj.getScore_adc();
-            score_spec = movieObj.getScore_spec();
-            score_ntz = movieObj.getScore_ntz();
-            summary = movieObj.getSummary();
-            poster_site = movieObj.getPoster();
-            review_sum = movieObj.getReview();
-            review_score = movieObj.getReview_score();
-            review_reple = movieObj.getReview_reple();
-            review_user = movieObj.getReview_user();
-            review_date = movieObj.getReview_date();
-
-//            System.out.println(movie_title);
-//            System.out.println(score_adc + " " + score_spec + " " + score_ntz);
-//            System.out.println(summary);
-//            System.out.println(poster_site);
-//            System.out.println();
-//            for (int i=0; i<5; i++) {
-//                System.out.println(review_sum[i][0]+ " " + review_sum[i][1] + " " + review_sum[i][2] + " " + review_sum[i][3]);
-//            }
-
-
-        } catch (IOException e) {
-            System.out.println("오류");
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            System.out.println("오류");
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * JFrame 생성합니다.
      */
-    public Client() throws InterruptedException {
+    public Client() throws InterruptedException, IOException {
         setSize(600, 700);
         setResizable(false);
         setLocationRelativeTo(null); // Frame 화면 가운데 위치
         setTitle("Network Project(Movie Review)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 메모리 제거
         setLayout(null);
-//        frameView();
+        frameView();
         setVisible(true);
     }
 
@@ -193,7 +101,7 @@ public class Client extends JFrame {
     /**
      * 초기 화면과 검색창에 영화 제목을 넣어 검색했을 때의 Layout을 구성합니다.
      */
-    /*private void frameView() throws InterruptedException {
+    private void frameView() throws InterruptedException {
         // 검색창 panel1
         getMovieInf();
 
@@ -202,65 +110,63 @@ public class Client extends JFrame {
         poster.setLayout(null);
         welcome = new JPanel();
 
-
-        label_p1 = new JLabel("검색창");
-        text_p1 = new JTextField(38);
-        btn1_p1 = new JButton("검색");
-        search.add(label_p1);
-        search.add(text_p1);
-        search.add(btn1_p1);
+        labelSearch = new JLabel("검색창");
+        searchMovie = new JTextField(38);
+        btnSearch = new JButton("검색");
+        search.add(labelSearch);
+        search.add(searchMovie);
+        search.add(btnSearch);
         search.setBounds(0,0,600,50);
         search.setBorder(new LineBorder(Color.black));
 
         // 1 ~ 6순위 포스터 panel2
-        label1_p2 = new JLabel[6]; // 포스터 사진
-        label2_p2 = new JLabel[6]; // [순위]영화 제목
+        labelPoster = new JLabel[6]; // 포스터 사진
+        labelTitle = new JLabel[6]; // [순위]영화 제목
         for(int i = 0; i<6; i++) { // 영화 포스터 삽입 + 영화 제목 삽입
-            label1_p2[i] = new JLabel();
-            label2_p2[i] = new JLabel();
-            Thread cp = new Thread(new FileCopy(main_sum[i][1],main_sum[i][0]));
-            cp.start();
-            cp.join();
+            labelPoster[i] = new JLabel();
+            labelTitle[i] = new JLabel();
+
+
             if (i == 0) {
-                label1_p2[i].setBounds(45, 55, 160, 200);
-                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));//이미지 대입
-                label2_p2[i].setBounds(45, 40, 160, 15);
-                label2_p2[i].setText("1순위 : " + main_sum[i][0]); // 영화이름 1차원 배열 설정 후 삽입
+                labelPoster[i].setBounds(45, 55, 160, 200);
+                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(0)));//이미지 대입
+                labelTitle[i].setBounds(45, 40, 160, 15);
+                labelTitle[i].setText("1순위 : " + mainTitle.get(0)); // 영화이름 1차원 배열 설정 후 삽입
             }
             if (i == 1) {
-                label1_p2[i].setBounds(215, 55, 160, 200);
-                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));
-                label2_p2[i].setBounds(215, 40, 160, 15);
-                label2_p2[i].setText("2순위 : " + main_sum[i][0]);
+                labelPoster[i].setBounds(215, 55, 160, 200);
+                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(1)));
+                labelTitle[i].setBounds(215, 40, 160, 15);
+                labelTitle[i].setText("2순위 : " + mainTitle.get(1));
             }
             if (i == 2) {
-                label1_p2[i].setBounds(385, 55, 160, 200);
-                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));
-                label2_p2[i].setBounds(385, 40, 160, 15);
-                label2_p2[i].setText("3순위 : " + main_sum[i][0]);
+                labelPoster[i].setBounds(385, 55, 160, 200);
+                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(2)));
+                labelTitle[i].setBounds(385, 40, 160, 15);
+                labelTitle[i].setText("3순위 : " + mainTitle.get(2));
             }
             if (i == 3) {
-                label1_p2[i].setBounds(45, 280, 160, 200);
-                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));
-                label2_p2[i].setBounds(45, 265, 160, 15);
-                label2_p2[i].setText("4순위 : " + main_sum[i][0]);
+                labelPoster[i].setBounds(45, 280, 160, 200);
+                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(3)));
+                labelTitle[i].setBounds(45, 265, 160, 15);
+                labelTitle[i].setText("4순위 : " + mainTitle.get(3));
             }
             if (i == 4) {
-                label1_p2[i].setBounds(215, 280, 160, 200);
-                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));
-                label2_p2[i].setBounds(215, 265, 160, 15);
-                label2_p2[i].setText("5순위 : " + main_sum[i][0]);
+                labelPoster[i].setBounds(215, 280, 160, 200);
+                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(4)));
+                labelTitle[i].setBounds(215, 265, 160, 15);
+                labelTitle[i].setText("5순위 : " + mainTitle.get(4));
             }
             if (i == 5) {
-                label1_p2[i].setBounds(385, 280, 160, 200);
-                label1_p2[i].setIcon(new ImageIcon(file.getAbsolutePath()));
-                label2_p2[i].setBounds(385, 265, 160, 15);
-                label2_p2[i].setText("6순위 : " + main_sum[i][0]);
+                labelPoster[i].setBounds(385, 280, 160, 200);
+                labelPoster[i].setIcon(new ImageIcon(mainPoster.get(5)));
+                labelTitle[i].setBounds(385, 265, 160, 15);
+                labelTitle[i].setText("6순위 : " + mainTitle.get(5));
             }
-            label1_p2[i].setBorder(new LineBorder(Color.black));
+            labelPoster[i].setBorder(new LineBorder(Color.black));
             // 포스터 넣기
-            poster.add(label1_p2[i]);
-            poster.add(label2_p2[i]);
+            poster.add(labelPoster[i]);
+            poster.add(labelTitle[i]);
 
         }
 
@@ -280,49 +186,44 @@ public class Client extends JFrame {
         add(poster);
         add(welcome);
 
-        *//**
-         * 영화 검색
-         *//*
-        btn1_p1.addActionListener(new ActionListener() {
+        btnSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (text_p1.getText().equals("")) {
+                if (searchMovie.getText().equals("")) {
                     JOptionPane.showMessageDialog(getContentPane(), "검색어를 입력해주세요!");
                 }
                 else {
-                    search_title = text_p1.getText();
-                    recycle();
+                    searchTitle = searchMovie.getText();
+                    searchView();
                 }
             }
         });
     }
-*/
+
     /**
      * 초기 화면에서 검색창에 영화 제목을 넣어 검색했을 때 Layout을 새롭게 배치합니다.
      */
-    private void recycle() {
-        getMovieDetail();
-        Thread test = new Thread(new FileCopy(poster_site,movie_title));
-        test.start();
-        try {
-            test.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    private void searchView() {
+        getMovieSearch();
+
+        String scorebox[] = {"10", "9", "8", "7", "6", "5", "4", "3", "2", "1"};
+        score = new JComboBox<String>(scorebox);
 
         /**
          * 크롤링한 값을 JFrame에 적용시킵니다.
          */
         String header[] = {"아이디", "내용", "평점", "날짜"};
-        JTable review = new JTable(review_sum,header);
+
+        DefaultTableModel model = new DefaultTableModel(review_sum,header);
+        JTable review = new JTable(model);
         JScrollPane reviewScroll = new JScrollPane(review);
 
         JLabel gradeAudience = new JLabel("관람객 ");
-        JLabel audienceStar = new JLabel(score_adc);
+        JLabel audienceStar = new JLabel("1");
         JLabel gradeCritic = new JLabel("평론가");
-        JLabel criticStar = new JLabel(score_spec);
+        JLabel criticStar = new JLabel("1");
         JLabel gradeNetizen = new JLabel("네티즌");
-        JLabel netizenStar = new JLabel(score_ntz);
+        JLabel netizenStar = new JLabel("1");
         JLabel gradeMy = new JLabel("내 평점");
         JLabel myStar = new JLabel("0.00");
         JTextArea story = new JTextArea(summary);
@@ -330,12 +231,14 @@ public class Client extends JFrame {
 
         poster.removeAll();
         welcome.removeAll();
+        grade.removeAll();
 
-        movieposter.setBounds(5, 3, 295, 270);
-        movieposter.setBorder(new LineBorder(Color.black));
-//        movieposter.setIcon(new ImageIcon(file.getAbsolutePath()));
+        moviePoster.setBounds(5, 3, 295, 270);
+        moviePoster.setBorder(new LineBorder(Color.black));
+        ImageIcon icon = imageSize2(posterUrl);
+        moviePoster.setIcon(icon);
 //        movieposter.setText(poster_site);//현재는 포스터가 있는 웹사이트 주소
-        poster.add(movieposter);
+        poster.add(moviePoster);
 
         grade.setBounds(301, 3, 280, 90);
         grade.setBorder(new LineBorder(Color.black));
@@ -380,16 +283,49 @@ public class Client extends JFrame {
         score10.setBounds(510, 4, 75, 55);
         score10.setFont(new Font("", Font.BOLD, 30));
         score10.setHorizontalAlignment(JLabel.CENTER);
-        score.setFont(new Font("", Font.BOLD, 30));
-        score.setHorizontalAlignment(JTextField.CENTER);
+        score.setFont(new Font("", Font.BOLD, 15));
         score.setBounds(410, 4, 100, 55);
         score.setBorder(new LineBorder(Color.black));
         registration.setBounds(410, 61, 175, 50);
         welcome.add(score);
         welcome.add(score10);
-        welcome.add(registration);
+        welcome.add(registration);//등록버튼
         welcome.add(reviewText);
 
+        /**
+         * 리뷰를 등록합니다.
+         */
+        registration.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Date date = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.dd.MM HH:mm");
+                String review_date = formatter.format(date);
+                String inputStr[] = new String[4];
+
+                inputStr[0] = userID;
+                inputStr[1] = reviewText.getText();
+                inputStr[2] = score.getSelectedItem().toString();
+                inputStr[3] = review_date;
+
+                for(int i=0; i < review.getRowCount(); i++){
+                    if(review.getValueAt(i,0) == userID){
+                        model.removeRow(i);//같은 아이디로 이미 작성했으면 제거
+                        break;
+                    }
+                }
+
+                model.addRow(inputStr);
+
+                if (inputStr[2] == "10") {
+                    myStar.setText(inputStr[2] + ".0");
+                }else{
+                    myStar.setText(inputStr[2] + ".00");
+                }//내 점수 표시
+
+                reviewText.setText("");
+            }
+        });
         add(poster);
         add(welcome);
 
@@ -397,53 +333,64 @@ public class Client extends JFrame {
         setVisible(true);
     }
 
-//    File file, file2;
-    BufferedOutputStream fos;
+    /**
+     * CrawlingRankServer로부터 값을 받아옵니다.
+     */
+    public void getMovieInf(){
+        try {
+            Socket socket = new Socket("localhost", 5000);
+
+            OutputStream os = socket.getOutputStream();
+            InputStream is = socket.getInputStream();
+
+            ObjectOutputStream oos = new ObjectOutputStream(os);
+            ObjectInputStream ois = new ObjectInputStream(is);
+
+            oos.writeObject(null);
+
+            List<MovieDto> movieDtoList = (List<MovieDto>) ois.readObject();
+
+            for (MovieDto movieDto : movieDtoList) {
+                mainTitle.add(movieDto.getTitle());
+                mainPoster.add(movieDto.getPosterUrl());
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
-     * path_name에 자신의 파일 위치에 맞는 주소로 변환해야합니다.
-     * Url 이미지를 저장합니다.
+     * CrawlingServer로부터 값을 받아옵니다.
      */
-    class FileCopy implements Runnable{
+    public void getMovieSearch() {
+        try {
+            Socket socket = new Socket("localhost", 5000);
 
-        public static String urlstr;
-        public static String file_name;
-        public FileCopy(String url,String title) {
-            urlstr = url;
-            file_name = title.replaceAll(" ","_").replaceAll(":","");//공백 변경, 사용불가 문자 제거
+            OutputStream os = socket.getOutputStream();
+            InputStream is = socket.getInputStream();
 
+            ObjectOutputStream oos = new ObjectOutputStream(os);
+            ObjectInputStream ois = new ObjectInputStream(is);
+
+            oos.writeObject(searchTitle);
+
+            MovieSearchDto movieSearchDto = (MovieSearchDto) ois.readObject();
+            movieScore = movieSearchDto.getScore();
+            genre = movieSearchDto.getGenre();
+            summary = movieSearchDto.getSummary();
+            posterUrl = movieSearchDto.getPosterUrl();
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("오류");
+            e.printStackTrace();
         }
+    }
 
-        @Override
-        public void run() {
-            try{
-//                java.net.URL url = new java.net.URL(urlstr);
-//                InputStream is = url.openStream();
-
-                // 해당 url과 노드 연결된 입력 스트림을 반환한다.
-//                BufferedInputStream bis = new BufferedInputStream(is);
-//                String path_name = "C:/Users/RJW/IdeaProjects/USW_NetworkProject/recommendMovie/"+file_name+".png";// 파일경로 지정
-//                file = new File(path_name);
-//
-//                BufferedOutputStream bos = null;
-//                //중복체크
-//                if (!file.exists()) {
-//                    file2 = new File("C:/Users/RJW/IdeaProjects/USW_NetworkProject/recommeqendMovie/"+file_name+".jpg");
-//                    fos = new BufferedOutputStream(new FileOutputStream(file));
-//                    bos = new BufferedOutputStream(fos);
-//
-//                    int input=0;
-//                    byte[] data = new byte[3000];
-//                    while((input = bis.read(data))!=-1){
-//                        bos.write(data, 0, input);
-//                        bos.flush();
-//                    }
-//
-//                    bis.close(); bos.close();
-//                    is.close(); fos.close();
-                } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        }
+    private ImageIcon imageSize2(String absolutePath) {
+        ImageIcon icon = new ImageIcon(absolutePath);
+        Image img = icon.getImage();
+        Image changeImg = img.getScaledInstance(295, 270, Image.SCALE_SMOOTH);
+        ImageIcon changeIcon = new ImageIcon(changeImg);
+        return changeIcon;
     }
 }

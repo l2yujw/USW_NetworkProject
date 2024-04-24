@@ -13,17 +13,18 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CrawlingThread implements Runnable {
+public class CrawlingThread extends Thread {
 
     ObjectInputStream ois;
     ObjectOutputStream oos;
+    OutputStream os;
     InputStream is;
 
     public CrawlingThread(Socket socket) {
         is = null;
         try {
             is = socket.getInputStream();
-            OutputStream os = socket.getOutputStream();
+            os = socket.getOutputStream();
 
             ois = new ObjectInputStream(is); //검색어
             oos = new ObjectOutputStream(os); //Dto 전송
@@ -34,8 +35,10 @@ public class CrawlingThread implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("실행");
         try {
             String search = (String) ois.readObject();
+            System.out.println("search" + search);
             if (search != null) {
                 //검색
                 movieSearchCrawling(search);
@@ -43,6 +46,9 @@ public class CrawlingThread implements Runnable {
                 //초기화면
                 movieCrawling();
             }
+            ois.close();
+            is.close();
+            os.close();
 
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -53,22 +59,21 @@ public class CrawlingThread implements Runnable {
         String url = "https://www.moviechart.co.kr/rank/realtime/index/image";// 영화 랭킹
         Connection conn = Jsoup.connect(url);
 
-        List<MovieDto> movieDtoList = new ArrayList<>();
-
         Document doc = conn.get();
         Elements movieList = doc.getElementsByClass("movieBox-item");
 
-        MovieDto movieDto = new MovieDto();
+        ArrayList<MovieDto> movieDtoList = new ArrayList<>();
 
         for (int i = 0; i < 6; i++) {
-            String title = movieList.get(i).select("a img").attr("src");
-            String posterUrl = movieList.get(i).select("a img").attr("alt");
-            movieDto.setTitle(title);
-            movieDto.setPosterUrl(posterUrl);
-            movieDtoList.add(movieDto);
+            movieDtoList.add(
+                    new MovieDto(
+                            movieList.get(i).select("a img").attr("src"),
+                            movieList.get(i).select("a img").attr("alt")
+                    )
+            );
         }
-
         oos.writeObject(movieDtoList);
+        oos.close();
     }
 
     private void movieSearchCrawling(String search) throws IOException {
@@ -101,7 +106,11 @@ public class CrawlingThread implements Runnable {
             }
         }
 
+        String summary = doc.getElementsByClass("text").text();
+        movieSearchDto.setSummary(summary);
+
         oos.writeObject(movieSearchDto);
+        oos.close();
     }
 
     private static boolean isEquals(Element element, String find) {

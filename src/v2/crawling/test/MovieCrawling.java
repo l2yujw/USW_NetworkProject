@@ -23,13 +23,12 @@ public class MovieCrawling {
             Document doc = conn.get();
             Elements movieList = doc.getElementsByClass("movieBox-item");
             System.out.println(movieList.get(0));
-            MovieDto movieDto = new MovieDto();
+            MovieDto movieDto = new MovieDto("a", "b");
 
             for (int i = 0; i < 6; i++) {
                 String title = movieList.get(i).select("a img").attr("src");
                 String posterUrl = movieList.get(i).select("a img").attr("alt");
-                movieDto.setTitle(title);
-                movieDto.setPosterUrl(posterUrl);
+
                 movieDtos.add(movieDto);
             }
 
