@@ -57,19 +57,28 @@ Server & Client : JAVA / Socket Programming
 
   - 유저 등록
   ```java
-    PrintWriter out = new PrintWriter(socket.getOutputStream());
-                out.println(userID);
-                out.flush();
-                while (true) {
-                    sendBtn.addActionListener(e -> {
-                        if(!fieldMsg.getText().equals("")) {
-                            String outputMsg = fieldMsg.getText();
-                            out.println(outputMsg);
-                            out.flush();
-                            fieldMsg.setText("");
-                        }
-                    });
-                }
+  try {
+      userID = in.readLine();
+      userList.add(userID);
+      sendAll("[" + userID + "]님이 들어오셨습니다");
+      sendAll("사용자목록" + userList);
+      while (in != null) {
+          String inputMsg = in.readLine();
+          sendAll(userID + ">>" + inputMsg);
+      }
+  } catch (IOException e) {
+      throw new RuntimeException(e);
+  } finally {
+      sendAll("[" + userID + "]님이 나가셨습니다");
+      userList.remove(userID);
+      sendAll("사용자목록" + userList);
+      list.remove(out);
+      try {
+          socket.close();
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+  }
   ```
 
 
