@@ -93,11 +93,11 @@ Server & Client : JAVA / Socket Programming
   ✅ CrawlingServer
   ```java
   while (true) {
-    System.out.println("Waiting v2.Client...");
-    socket = serverSocket.accept();
+      System.out.println("Waiting v2.Client...");
+      socket = serverSocket.accept();
 
-    CrawlingThread crawlingThread = new CrawlingThread(socket);
-    crawlingThread.start();
+      CrawlingThread crawlingThread = new CrawlingThread(socket);
+      crawlingThread.start();
   }
   ```
 
