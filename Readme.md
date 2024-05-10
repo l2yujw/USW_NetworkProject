@@ -5,6 +5,21 @@
 # 💭 Idea
 ![img.png](image_readme/idea.png)
 
+<br>
+
+---
+
+<br><br>
+
+# 수행 계획서
+
+![image](https://github.com/l2yujw/USW_NetworkProject/assets/49338509/086f60fc-d4aa-4465-afb6-d6d75a6131ac)
+
+<br>
+
+---
+
+<br><br>
 
 # 🎸Result
 
