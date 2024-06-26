@@ -18,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * ChatServer, CrawlingServer 가동 후 실행
@@ -55,6 +57,32 @@ public class Client extends JFrame {
     private final JButton registration = new JButton("등록");
     private final JTextArea reviewText = new JTextArea();
 
+
+
+    private final static String UNSECURED_CHAR_REGULAR_EXPRESSION =
+            "select|delete|update|insert|create|alter|drop";
+    private static Pattern unsecuredCharPattern;
+
+    public static void initialize(){
+        unsecuredCharPattern = Pattern.compile(UNSECURED_CHAR_REGULAR_EXPRESSION,Pattern.CASE_INSENSITIVE);
+    }
+    private static String makeSecureString(final String str, int maxLength)
+    {
+        String secureStr = str.substring(0, maxLength);
+        Matcher matcher = unsecuredCharPattern.matcher(secureStr);
+        if(matcher.find()){
+            return matcher.replaceAll("");
+        }
+        else{
+            return secureStr;
+        }
+    }
+
+    public static String makeSecureString2(String str){
+        String match = "[^\uAC00-\uD7A30-9a-zA-Z\\s]";
+        str = str.replaceAll(match, "");
+        return str;
+    }
 
     public static void main(String[] args) throws InterruptedException, IOException {
         checkID();
@@ -196,6 +224,8 @@ public class Client extends JFrame {
                 }
                 else {
                     searchTitle = searchMovie.getText();
+                    searchTitle =makeSecureString(searchTitle,searchTitle.length());//명령어 형식 제거
+                    searchTitle = makeSecureString2(searchTitle);//특수문자 제거
                     try {
                         searchView();
                     } catch (MalformedURLException ex) {

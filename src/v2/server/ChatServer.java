@@ -109,7 +109,6 @@ public class ChatServer {
 
             try {
                 userID = in.readLine();
-                System.out.println("[" + userID + "와 새 연결 생성]");
                 userList.add(userID);
                 sendAll("[" + userID + "]님이 들어오셨습니다");
                 sendAll("사용자목록" + userList);
@@ -119,7 +118,7 @@ public class ChatServer {
                 }
 
             } catch (IOException e) {
-                System.out.println("[" + userID + "와 접속 끊김]");
+                throw new RuntimeException(e);
             } finally {
                 sendAll("[" + userID + "]님이 나가셨습니다");
                 userList.remove(userID);
@@ -131,7 +130,6 @@ public class ChatServer {
                     e.printStackTrace();
                 }
             }
-            System.out.println("[" + userID + "와 연결종료]");
         }
 
         /**
